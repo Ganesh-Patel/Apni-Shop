@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
+import './ShopNav.css';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Make sure you have react-router-dom installed
 
 const categories = [
@@ -165,85 +167,92 @@ const categories = [
 ];
 
 const ShopNav = () => {
-    const [dropdown, setDropdown] = useState(null);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const navigate = useNavigate();
-  
-    const handleMouseEnter = (index) => {
-      setDropdown(index);
-    };
-  
-    const handleMouseLeave = () => {
-      setDropdown(null);
-    };
-  
-    const handleCategoryClick = (categoryName) => {
-      navigate(`/shop/${categoryName.toLowerCase()}`);
-    };
-  
-    const handleSubcategoryClick = (categoryName, subcategory) => {
-      navigate(`/shop/${categoryName.toLowerCase()}/${subcategory.toLowerCase()}`);
-    };
-  
-    const toggleMenu = () => {
-      setIsMenuOpen(!isMenuOpen);
-    };
-  
-    return (
-      <nav className="bg-gray-100 text-black">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          {/* Hamburger Icon for Mobile View */}
-          <div className="lg:hidden">
-            <button onClick={toggleMenu} className="text-black">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </button>
-          </div>
-  
-          {/* Categories List */}
-          <ul className={`flex space-x-8 ${isMenuOpen ? 'block' : 'hidden'} lg:flex`}>
-            {categories.map((category, index) => (
-              <li
-                key={category.name}
-                className="relative"
-                onMouseEnter={() => handleMouseEnter(index)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <a
-                  href="#"
-                  onClick={(e) => { e.preventDefault(); handleCategoryClick(category.name); }}
-                  className="hover:text-yellow-500"
-                >
-                  {category.name}
-                </a>
-  
-                {dropdown === index && (
-                  <ul className="absolute left-0 mt-2 bg-white text-gray-900 shadow-lg rounded-lg w-40 z-50">
-                    {category.subcategories.map((subcategory, subIndex) => (
-                      <li key={subIndex} className="px-4 py-2 hover:bg-gray-200">
-                        <a
-                          href="#"
-                          onClick={(e) => { e.preventDefault(); handleSubcategoryClick(category.name, subcategory); }}
-                        >
-                          {subcategory}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-    );
+  const [dropdown, setDropdown] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to manage mobile menu
+  const navigate = useNavigate();
+
+  const handleMouseEnter = (index) => {
+    setDropdown(index);
   };
-  
-  export default ShopNav;
+
+  const handleMouseLeave = () => {
+    setDropdown(null);
+  };
+
+  const handleCategoryClick = (categoryName) => {
+    navigate(`/shop/${categoryName.toLowerCase()}`);
+  };
+
+  const handleSubcategoryClick = (categoryName, subcategory) => {
+    navigate(`/shop/${categoryName.toLowerCase()}/${subcategory.toLowerCase()}`);
+  };
+
+  // Toggle mobile menu
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  return (
+    <nav className="bg-gray-100 text-black">
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        {/* Hamburger Icon for Mobile View */}
+        <div className="lg:hidden">
+          <button onClick={toggleMenu} className="text-black">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Categories List */}
+        <ul className={`flex space-x-8 ${isMenuOpen ? 'block' : 'hidden'} lg:flex`}>
+          {categories.map((category, index) => (
+            <li
+              key={category.name}
+              className="relative"
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCategoryClick(category.name);
+                }}
+                className="hover:text-yellow-500"
+              >
+                {category.name}
+              </a>
+
+              {dropdown === index && (
+                <ul className="absolute bg-white shadow-lg rounded-lg z-50">
+                  {category.subcategories.map((subcategory, subIndex) => (
+                    <li key={subIndex} className="px-4 py-2 hover:bg-gray-200">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSubcategoryClick(category.name, subcategory);
+                        }}
+                      >
+                        {subcategory}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  );
+};
+
+export default ShopNav;
