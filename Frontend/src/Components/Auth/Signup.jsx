@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser } from '../../utils/api';
+import { registerUser } from '../../Utils/api.js';
 
 function Signup() {
   const [firstname, setFirstname] = useState('');

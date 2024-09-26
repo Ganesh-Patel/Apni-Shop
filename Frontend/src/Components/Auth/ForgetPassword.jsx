@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
-import { verifyemail, sendOtp,validateOtp,changePassword } from '../../utils/api';
+import { verifyemail, sendOtp,validateOtp,changePassword } from '../../Utils/api.js';
 
 function ForgetPassword() {
     const [email, setEmail] = useState('');
