@@ -9,6 +9,11 @@ import { UserContext } from './Components/../Contexts/UserContext';
 import ProtectedRoute from './Components/Routes/ProtectedRoute.jsx'; 
 import ForgetPassword from './Components/Auth/ForgetPassword.jsx';
 import VerifyEmail from './Components/Auth/VerifyEmail.jsx';
+import ContatcForm from './Components/Pages/ContactPage/ContactForm.jsx';
+import Shop from './Components/Pages/Shop/Shop.jsx';
+import AdminDashboard from './Components/Admin/AdminDashboard.jsx';
+import ManageUsers from './Components/Admin/ManageUsers/ManageUsers.jsx';
+import ManageProducts from './Components/Admin/ManageProducts/ManageProducts.jsx';
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -27,9 +32,34 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgotpassword" element={<ForgetPassword />} />
           <Route path="/verifyemail" element={<VerifyEmail />} />
+          <Route path="/contact" element={<ContatcForm />} />
+          <Route path="/shop" element={<Shop />} />
 
           {/* Protected Routes - only accessible if logged in */}
-          
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute>
+                  <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+             <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                  <ManageUsers/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute>
+                  <ManageProducts/>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
 
