@@ -2,11 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
  import { fetchUsers} from '../../../Utils/api.js'; 
+ import AddUser from './AddUser.jsx';
 function ManageUsers() {
   const { isLoggedIn } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   // Fetch all users when the component loads
   useEffect(() => {
     if (isLoggedIn) {
@@ -28,7 +33,6 @@ function ManageUsers() {
     }
 
   };
-
   // Handle search filtering
   const handleSearch = (e) => {
     const term = e.target.value;
@@ -44,22 +48,7 @@ function ManageUsers() {
       setFilteredUsers(users);
     }
   };
-
   // Add a new user (simplified)
-  const handleAddUser = async () => {
-    // Add user logic
-    // Show a modal or redirect to a form for adding a user
-    const newUser = prompt("Enter new user email:"); // Simplified for demo purposes
-    if (newUser) {
-      try {
-        await addUser({ email: newUser });
-        toast.success('User added successfully');
-        loadUsers(); // Refresh users list
-      } catch (error) {
-        toast.error('Failed to add user');
-      }
-    }
-  };
 
   // Toggle enable/disable user
   const handleToggleStatus = async (user) => {
@@ -102,11 +91,11 @@ function ManageUsers() {
   return (
     <div className="container mx-auto p-6 mt-12">
       <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
-
+      <AddUser isOpen={isModalOpen} onClose={closeModal} />
       {/* Add User Button */}
       <div className="mb-4">
         <button
-          onClick={handleAddUser}
+          onClick={openModal}
           className="bg-teal-700 text-white px-4 py-2 rounded-md hover:bg-teal-900"
         >
           Add User

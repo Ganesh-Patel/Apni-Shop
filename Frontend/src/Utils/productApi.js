@@ -5,7 +5,9 @@ const API_URL = 'http://localhost:3008/api/product/';
 
 export const getAllProducts=async()=>{
     try {
-        const response = await axios.get(`${API_URL}getallproduct`);
+        const response = await axios.get(`${API_URL}getallproducts`,{},{
+            withCredentials: true,
+        });
         console.log(response.data)
         return response.data;
         } catch (error) 
@@ -17,7 +19,9 @@ export const getAllProducts=async()=>{
 
 export const addProduct=async(product)=>{
     try {
-        const response = await axios.post(`${API_URL}addproduct`,product);
+        const response = await axios.post(`${API_URL}addproduct`,product,{
+            withCredentials: true, 
+        });
         console.log(response.data)
         return response.data;
     }catch(error)

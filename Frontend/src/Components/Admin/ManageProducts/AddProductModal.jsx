@@ -14,15 +14,13 @@ function AddProductModal({ onClose, refreshProducts }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         // Create FormData object to handle file upload
         const formData = new FormData();
         formData.append('name', name);
         formData.append('brand', brand);
         formData.append('category', category);
         formData.append('price', price);
-        formData.append('image', image); // Append image file
-
+        formData.append('image', image); 
         try {
             await addProduct(formData); 
             refreshProducts(); 
@@ -84,7 +82,7 @@ function AddProductModal({ onClose, refreshProducts }) {
                             onChange={handleImageChange}
                             className="w-full border rounded px-3 py-2"
                             accept="image/*"
-                            required
+                
                         />
                     </div>
                     <div className="flex justify-end">

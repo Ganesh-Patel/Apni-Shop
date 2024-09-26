@@ -16,7 +16,7 @@ import ManageUsers from './Components/Admin/ManageUsers/ManageUsers.jsx';
 import ManageProducts from './Components/Admin/ManageProducts/ManageProducts.jsx';
 
 function App() {
-  const { isLoggedIn } = useContext(UserContext);
+  // const { isLoggedIn } = useContext(UserContext);
   const location = useLocation(); 
   // Pages that should NOT have the Header and Footer
   const noHeaderFooterRoutes = ['/login', '/signup', '/forgotpassword','/verifyemail','/VerifyEmail'];

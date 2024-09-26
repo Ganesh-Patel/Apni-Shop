@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAllProducts, addProduct } from '../../../Utils/productApi.js';
+import AddProductModal from './AddProductModal.jsx';
 
 function ManageProducts() {
     const [products, setProducts] = useState([]);
@@ -19,13 +20,12 @@ function ManageProducts() {
             setLoading(false);
         }
     };
-
     useEffect(() => {
         getProducts();
     }, []);
 
     const handleAddProduct = () => {
-        setModalOpen(true); // Open modal on button click
+        setModalOpen(true); 
     };
 
     const handleModalClose = () => {
