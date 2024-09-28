@@ -1,13 +1,19 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CreateCard = ({ product }) => {
-  const { name, description, price, rating, inStock, images } = product;
+  const {_id, name, description, price, rating, inStock, images } = product;
   const image = images[0]; // Accessing the first image from the array
+  const navigate = useNavigate(); 
 
   // Function to truncate the description to a specified number of words
   const truncateDescription = (text, wordCount) => {
     const words = text.split(' ');
     return words.length > wordCount ? words.slice(0, wordCount).join(' ') + '...' : text;
+  };
+
+  const handleViewDetails = () => {
+    navigate(`/product/${_id}`);
   };
 
   return (
@@ -26,7 +32,7 @@ const CreateCard = ({ product }) => {
           </span>
         </div>
         <div className="flex justify-between mt-4">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+          <button  onClick={handleViewDetails} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
             View Details
           </button>
           <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">

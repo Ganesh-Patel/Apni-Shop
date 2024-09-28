@@ -15,6 +15,7 @@ import AdminDashboard from './Components/Admin/AdminDashboard.jsx';
 import ManageUsers from './Components/Admin/ManageUsers/ManageUsers.jsx';
 import ManageProducts from './Components/Admin/ManageProducts/ManageProducts.jsx';
 import AboutUs from './Components/AboutUs/AboutUs.jsx'
+import Details from './Components/Pages/ProductDetails/Details.jsx';
 
 function App() {
   // const { isLoggedIn } = useContext(UserContext);
@@ -36,6 +37,7 @@ function App() {
           <Route path="/contact" element={<ContatcForm />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/product/:id" element={<Details />} />
 
           {/* Protected Routes - only accessible if logged in */}
           <Route
