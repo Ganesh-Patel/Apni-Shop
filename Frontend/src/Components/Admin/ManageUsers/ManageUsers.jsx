@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
-import { fetchUsers } from '../../../Utils/api.js';
+import { fetchUsers, deleteUser, updateUser } from '../../../Utils/api.js';
 import AddUser from './AddUser.jsx';
-import ConfirmationBox from '../../SubComponents/ConfirmationBox.jsx'; // Use your reusable ConfirmationBox component
+import ConfirmationBox from '../../SubComponents/ConfirmationBox.jsx'; 
+import UpdateUserModal from './UpdareUserModal.jsx';
 
 function ManageUsers() {
   const { isLoggedIn } = useContext(UserContext);
@@ -11,10 +12,11 @@ function ManageUsers() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmOpen, setConfirmOpen] = useState(false); // Confirmation modal state
+  const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // Store selected user object
   const [actionMessage, setActionMessage] = useState('');
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -53,10 +55,9 @@ function ManageUsers() {
   };
 
   // Handle action selection
-  const handleAction = (action, id) => {
-    setSelectedUserId(id);
+  const handleAction = (action, user) => {
+    setSelectedUser(user); // Store the entire user object
     setSelectedAction(action);
-
     if (action === 'delete') {
       setActionMessage('Are you sure you want to delete this user?');
     } else if (action === 'edit') {
@@ -68,14 +69,29 @@ function ManageUsers() {
   };
 
   const handleConfirmAction = async () => {
+    setConfirmOpen(false); // Close confirmation box before proceeding
+
     if (selectedAction === 'delete') {
-      console.log(`Deleting user with ID: ${selectedUserId}`);
+      console.log(`Deleting user with ID: ${selectedUser._id}`);
+      try {
+        const response = await deleteUser(selectedUser._id);
+        if (response.status === 200) {
+          toast.success('User deleted successfully');
+          loadUsers();
+        } else {
+          toast.error('Failed to delete user');
+        }
+      } catch (error) {
+        toast.error('Error while deleting user');
+        console.error(error);
+      }
     } else if (selectedAction === 'edit') {
-      console.log(`Editing user with ID: ${selectedUserId}`);
+      console.log(`Editing user with ID: ${selectedUser._id}`);
+      setEditModalOpen(true); 
     } else if (selectedAction === 'change_role') {
-      console.log(`Changing role of user with ID: ${selectedUserId}`);
+      console.log(`Changing role of user with ID: ${selectedUser._id}`);
+      // Implement role change logic here
     }
-    setConfirmOpen(false);
   };
 
   return (
@@ -138,7 +154,7 @@ function ManageUsers() {
                   {/* Action Dropdown */}
                   <select
                     className="border rounded px-2 py-1"
-                    onChange={(e) => handleAction(e.target.value, user._id)}
+                    onChange={(e) => handleAction(e.target.value, user)}
                     defaultValue=""
                   >
                     <option value="" disabled>
@@ -157,6 +173,16 @@ function ManageUsers() {
           </tbody>
         </table>
       </div>
+
+      {/* Edit User Modal */}
+      {isEditModalOpen && (
+        <UpdateUserModal
+          isOpen={isEditModalOpen}
+          user={selectedUser}
+          onClose={() => setEditModalOpen(false)}
+          onUpdate={loadUsers} 
+        />
+      )}
 
       {/* Confirmation Box Modal */}
       <ConfirmationBox

@@ -39,8 +39,8 @@ export const updateUser = async (id, updates) => {
 
 export const deleteUser= async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}user/deleteuser`, { data: { id } });
-    console.log(`Task ${id} deleted successfully:`, { response: response.data });
+    const response = await axios.delete(`${API_URL}user/deleteuser/${id}`,{withCredentials:true});
+    console.log(`User ${id} deleted successfully:`, { response: response.data });
     return response.data;
   } catch (error) {
     console.error(`Error deleting task ${id}:`, { error: error.message });
