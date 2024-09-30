@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './Details.module.css';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; 
-import {getSingleProducts} from '../../../Utils/productApi.js'
+import 'react-toastify/dist/ReactToastify.css';
+import { getSingleProducts,addToWishlist } from '../../../Utils/productApi.js';
+import { UserContext } from '../../../Contexts/UserContext.jsx';
 
 function Details() {
-    const { _id } = useParams(); 
+    const { id } = useParams();
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isInWishlist, setIsInWishlist] = useState(false);
+    const { isLoggedIn } = useContext(UserContext);
 
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const response = await getSingleProducts(_id);
-                console.log(response)
-                if (response.ok) {
-                    setDetails(data.product); 
+                const response = await getSingleProducts(id);
+                if (response.status === 200) {
+                    setDetails(response.data.product);
                 } else {
-                    toast.error(data.message || 'Failed to load product details');
+                    toast.error(response.data.message || 'Failed to load product details');
                 }
             } catch (error) {
                 console.error('Error fetching product details:', error);
@@ -28,7 +30,7 @@ function Details() {
             }
         };
         fetchProductDetails();
-    }, [_id]);
+    }, [id]);
 
     if (loading) {
         return <div className={styles.details}>Loading...</div>;
@@ -41,6 +43,22 @@ function Details() {
     const handleAddToCart = () => {
         toast.success('Item added to cart!');
     };
+
+    const toggleWishlist = async () => {
+        if (isLoggedIn) {
+          const response = await addToWishlist(id);
+          if (response.status === 200) {
+            setIsInWishlist(!isInWishlist);
+          } else {
+            toast("Failed to add to wishlist");
+          }
+        } else {
+          // Save the current path before redirecting to login
+          const currentPath = window.location.pathname;
+          alert("Please login to add to wishlist");
+          navigate(`/login?redirect=${currentPath}`);
+        }
+      };
 
     return (
         <div className={styles.details}>
@@ -58,10 +76,26 @@ function Details() {
                 <p><strong>Price:</strong> ₹{details.price}</p>
                 <p><strong>Description:</strong> {details.description || 'No description available'}</p>
                 <p>
-                    <strong>Availability:</strong> {details.inStock ? 'In Stock' : 'Out of Stock'} 
+                    <strong>Availability:</strong> {details.inStock ? 'In Stock' : 'Out of Stock'}
                     ({details.inventory} units available)
                 </p>
-                <button onClick={handleAddToCart} className={styles.addToCartButton}>Add to Cart</button>
+               <div className={styles.buttonContainer}>
+                    <button onClick={handleAddToCart} className={styles.addToCartButton}>Add to Cart</button>
+
+                    {/* Add to Wishlist Button */}
+                    <button
+                        onClick={toggleWishlist}
+                        className={`${styles.wishlistButton} ${isInWishlist ? styles.inWishlist : ''}`}
+                    >
+                        <span className={styles.heartIcon}>
+                            {isInWishlist ? '❤️' : '🤍'}
+                        </span>
+                        <span className={styles.wishlistText}>
+                            {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                        </span>
+                    </button>
+                </div>
+
             </div>
         </div>
     );

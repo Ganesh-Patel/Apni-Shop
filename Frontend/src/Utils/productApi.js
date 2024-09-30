@@ -18,12 +18,13 @@ export const getAllProducts = async (queryParams = {}) => {
     }
 }
 export const getSingleProducts = async (id) => {
+    console.log('id for which we are finding the details ',id)
     try {
         const response = await axios.get(`${API_URL}getsingleproduct/${id}`, {
          withCredentials: true,
         });
-        console.log(response.data);
-        return response.data;
+        console.log(response);
+        return response;
     } catch (error) {
         console.error(error);
         return error;
@@ -66,6 +67,21 @@ export const deleteProduct=async(id)=>{
         return response;
     }catch(error)
     {
+        console.error(error);
+        return error;
+    }
+}
+
+
+export const addToWishlist = async (id) => {
+    console.log('id for which we are adding to wishlist  the details ',id)
+    try {
+        const response = await axios.post(`${API_URL}addToWishlist/${id}`,{}, {
+         withCredentials: true,
+        });
+        console.log(response);
+        return response;
+    } catch (error) {
         console.error(error);
         return error;
     }

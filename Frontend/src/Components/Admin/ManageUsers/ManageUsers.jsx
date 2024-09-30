@@ -1,43 +1,46 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
- import { fetchUsers} from '../../../Utils/api.js'; 
- import AddUser from './AddUser.jsx';
+import { fetchUsers } from '../../../Utils/api.js';
+import AddUser from './AddUser.jsx';
+import ConfirmationBox from '../../SubComponents/ConfirmationBox.jsx'; // Use your reusable ConfirmationBox component
+
 function ManageUsers() {
   const { isLoggedIn } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setConfirmOpen] = useState(false); // Confirmation modal state
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [actionMessage, setActionMessage] = useState('');
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
   // Fetch all users when the component loads
   useEffect(() => {
     if (isLoggedIn) {
-        loadUsers();
+      loadUsers();
     }
   }, [isLoggedIn]);
+
   const loadUsers = async () => {
     try {
-        console.log("calling fetch api");
-        const response = await fetchUsers();
-        console.log(response.data);
-        
-        // Set the users and filteredUsers from the response
-        setUsers(response.data.allUsers);
-        setFilteredUsers(response.data.allUsers); // Change this line to match the users array
+      const response = await fetchUsers();
+      setUsers(response.data.allUsers);
+      setFilteredUsers(response.data.allUsers);
     } catch (error) {
-        toast.error('Failed to fetch users');
-        console.error('Error fetching users:', error);
+      toast.error('Failed to fetch users');
+      console.error('Error fetching users:', error);
     }
-
   };
+
   // Handle search filtering
   const handleSearch = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
-
     if (term) {
       const filtered = users.filter(user =>
         user.email.toLowerCase().includes(term.toLowerCase()) ||
@@ -48,50 +51,37 @@ function ManageUsers() {
       setFilteredUsers(users);
     }
   };
-  // Add a new user (simplified)
 
-  // Toggle enable/disable user
-  const handleToggleStatus = async (user) => {
-    try {
-      await toggleUserStatus(user.user_id);
-      toast.success(`User ${user.is_active ? 'disabled' : 'enabled'} successfully`);
-      loadUsers(); // Refresh users list
-    } catch (error) {
-      toast.error('Failed to update user status');
+  // Handle action selection
+  const handleAction = (action, id) => {
+    setSelectedUserId(id);
+    setSelectedAction(action);
+
+    if (action === 'delete') {
+      setActionMessage('Are you sure you want to delete this user?');
+    } else if (action === 'edit') {
+      setActionMessage('Are you sure you want to edit this user?');
+    } else if (action === 'change_role') {
+      setActionMessage('Are you sure you want to change the role of this user?');
     }
+    setConfirmOpen(true); // Open confirmation modal
   };
 
-  // Delete user
-  const handleDeleteUser = async (user_id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        await deleteUser(user_id);
-        toast.success('User deleted successfully');
-        loadUsers(); // Refresh users list
-      } catch (error) {
-        toast.error('Failed to delete user');
-      }
+  const handleConfirmAction = async () => {
+    if (selectedAction === 'delete') {
+      console.log(`Deleting user with ID: ${selectedUserId}`);
+    } else if (selectedAction === 'edit') {
+      console.log(`Editing user with ID: ${selectedUserId}`);
+    } else if (selectedAction === 'change_role') {
+      console.log(`Changing role of user with ID: ${selectedUserId}`);
     }
-  };
-
-  // Change user role
-  const handleChangeRole = async (user) => {
-    const newRole = prompt("Enter new role for the user:", user.role); // Simplified for demo purposes
-    if (newRole && newRole !== user.role) {
-      try {
-        await changeUserRole(user.user_id, newRole);
-        toast.success('User role updated successfully');
-        loadUsers(); // Refresh users list
-      } catch (error) {
-        toast.error('Failed to change user role');
-      }
-    }
+    setConfirmOpen(false);
   };
 
   return (
     <div className="container mx-auto p-6 mt-12">
       <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
-      <AddUser isOpen={isModalOpen} onClose={closeModal} />
+      
       {/* Add User Button */}
       <div className="mb-4">
         <button
@@ -112,61 +102,72 @@ function ManageUsers() {
       />
 
       {/* Users Table */}
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border border-gray-300 p-2">User ID</th>
-            <th className="border border-gray-300 p-2">Email</th>
-            <th className="border border-gray-300 p-2">Status</th>
-            <th className="border border-gray-300 p-2">Role</th>
-            <th className="border border-gray-300 p-2">Last Login</th>
-            <th className="border border-gray-300 p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user.user_id}>
-              <td className="border border-gray-300 p-2">{user.user_id}</td>
-              <td className="border border-gray-300 p-2">{user.email}</td>
-              <td className="border border-gray-300 p-2">
-                {user.is_active ? 'Active' : 'Disabled'}
-              </td>
-              <td className="border border-gray-300 p-2">{user.role}</td>
-              <td className="border border-gray-300 p-2">{user.last_login}</td>
-              <td className="border border-gray-300 p-2 space-x-2">
-                {/* Toggle Enable/Disable */}
-                <button
-                  onClick={() => handleToggleStatus(user)}
-                  className={`px-2 py-1 text-sm rounded-md ${user.is_active ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
-                >
-                  {user.is_active ? 'Disable' : 'Enable'}
-                </button>
-                {/* Edit User */}
-                <button
-                  onClick={() => updateUser(user)}
-                  className="px-2 py-1 text-sm bg-yellow-500 text-white rounded-md"
-                >
-                  Edit
-                </button>
-                {/* Change Role */}
-                <button
-                  onClick={() => handleChangeRole(user)}
-                  className="px-2 py-1 text-sm bg-blue-500 text-white rounded-md"
-                >
-                  Change Role
-                </button>
-                {/* Delete User */}
-                <button
-                  onClick={() => handleDeleteUser(user.user_id)}
-                  className="px-2 py-1 text-sm bg-red-500 text-white rounded-md"
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full table-auto border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 p-2">User ID</th>
+              <th className="border border-gray-300 p-2">Profile Pic</th>
+              <th className="border border-gray-300 p-2">First Name</th>
+              <th className="border border-gray-300 p-2">Last Name</th>
+              <th className="border border-gray-300 p-2">Email</th>
+              <th className="border border-gray-300 p-2">Status</th>
+              <th className="border border-gray-300 p-2">Role</th>
+              <th className="border border-gray-300 p-2">Last Updated</th>
+              <th className="border border-gray-300 p-2">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredUsers.map((user) => (
+              <tr key={user._id}>
+                <td className="border border-gray-300 p-2">{user._id}</td>
+                <td className="border border-gray-300 p-2">
+                  <img
+                    src={user.profilePic}
+                    alt={user.firstname}
+                    className="h-16 w-16 object-cover"
+                  />
+                </td>
+                <td className="border border-gray-300 p-2">{user.firstname}</td>
+                <td className="border border-gray-300 p-2">{user.lastname}</td>
+                <td className="border border-gray-300 p-2">{user.email}</td>
+                <td className="border border-gray-300 p-2">{user.is_active ? 'Active' : 'Disabled'}</td>
+                <td className="border border-gray-300 p-2">{user.role}</td>
+                <td className="border border-gray-300 p-2">{new Date(user.updatedAt).toLocaleDateString()}</td>
+                <td className="border border-gray-300 p-2">
+                  {/* Action Dropdown */}
+                  <select
+                    className="border rounded px-2 py-1"
+                    onChange={(e) => handleAction(e.target.value, user._id)}
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      Select Action
+                    </option>
+                    <option value={user.is_active ? 'disable' : 'enable'}>
+                      {user.is_active ? 'Disable' : 'Enable'}
+                    </option>
+                    <option value="edit">Edit</option>
+                    <option value="delete">Delete</option>
+                    <option value="change_role">Change Role</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Confirmation Box Modal */}
+      <ConfirmationBox
+        isOpen={isConfirmOpen}
+        message={actionMessage}
+        onConfirm={handleConfirmAction}
+        onCancel={() => setConfirmOpen(false)}
+      />
+
+      {/* Add User Modal */}
+      <AddUser isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 }
