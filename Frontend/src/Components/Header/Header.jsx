@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import Navbar from './Navbar/Navbar'; 
+import { FaHeart, FaShoppingCart, FaUser } from 'react-icons/fa';
+import Navbar from './Navbar/Navbar';
 import { UserContext } from '../../Contexts/UserContext';
 import { logoutUser } from '../../Utils/api.js';
 
@@ -18,17 +18,16 @@ function Header() {
     }
   };
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
-     const response= await logoutUser(setIsLoggedIn);
-      if(response.status=200)
-      {
+      const response = await logoutUser(setIsLoggedIn);
+      if (response.status = 200) {
         setUser(null);
       }
-      } catch (error) {
-        console.error(error);
+    } catch (error) {
+      console.error(error);
 
-      }
+    }
   };
 
   useEffect(() => {
@@ -50,9 +49,13 @@ function Header() {
         <Navbar />
 
         <div className="flex items-center space-x-4">
+
+          <Link to="/wishlist" className="flex items-center text-gray-800 hover:text-teal-500">
+            <FaHeart className="text-xl" />
+          </Link>
+
           <Link to="/cart" className="flex items-center text-gray-800 hover:text-teal-500">
             <FaShoppingCart className="text-xl" />
-            <span className="ml-1">Cart</span>
           </Link>
 
           {isLoggedIn && user ? (

@@ -13,7 +13,7 @@ function AboutUs() {
         <div className="flex flex-col lg:flex-row items-center mb-12">
           <div className="lg:w-1/2">
             <img
-              src="https://example.com/about-image.jpg"
+              src="https://img.freepik.com/premium-photo/ecommerce-website-banner-design_1281315-1674.jpg"
               alt="Apni-Shop"
               className="rounded-lg shadow-lg w-full object-cover h-96"
             />
@@ -85,27 +85,27 @@ function AboutUs() {
             {/* Team Member 1 */}
             <div className="text-center">
               <img
-                src="https://example.com/team-member-1.jpg"
+                src="https://i.pinimg.com/280x280_RS/79/dd/11/79dd11a9452a92a1accceec38a45e16a.jpg"
                 alt="Team Member 1"
                 className="rounded-full w-40 h-40 mx-auto mb-4 object-cover"
               />
-              <h3 className="text-xl font-semibold text-teal-600">John Doe</h3>
+              <h3 className="text-xl font-semibold text-teal-600">Ganesh Patel</h3>
               <p className="text-gray-600">CEO & Founder</p>
             </div>
             {/* Team Member 2 */}
             <div className="text-center">
               <img
-                src="https://example.com/team-member-2.jpg"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHytcaoXDqynWuboDMnjyJ-kG1mxiWQGGuzzTGOWize35jKiP9VUWvOUhkEZtXYOxexKQ&usqp=CAU"
                 alt="Team Member 2"
                 className="rounded-full w-40 h-40 mx-auto mb-4 object-cover"
               />
-              <h3 className="text-xl font-semibold text-teal-600">Jane Smith</h3>
+              <h3 className="text-xl font-semibold text-teal-600">Sunny Kumar</h3>
               <p className="text-gray-600">CTO & Co-Founder</p>
             </div>
             {/* Team Member 3 */}
             <div className="text-center">
               <img
-                src="https://example.com/team-member-3.jpg"
+                src="https://www.shutterstock.com/image-vector/person-gray-photo-placeholder-woman-600nw-1241538838.jpg"
                 alt="Team Member 3"
                 className="rounded-full w-40 h-40 mx-auto mb-4 object-cover"
               />

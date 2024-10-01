@@ -35,7 +35,7 @@ const CreateCard = ({ product }) => {
     } else {
       // Save the current path before redirecting to login
       const currentPath = window.location.pathname;
-      alert("Please login to add to wishlist");
+      toast("Please login to add to wishlist");
       navigate(`/login?redirect=${currentPath}`);
     }
   };
@@ -58,17 +58,32 @@ const CreateCard = ({ product }) => {
         <div className="flex items-baseline mt-2">
           <span className="text-lg font-bold text-pink-600">₹{price.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between items-center mt-2">
-          <span className="text-sm text-yellow-500">⭐ {rating}</span>
-          <span className={`text-sm font-semibold ${inStock ? 'text-green-600' : 'text-red-600'}`}>
-            {inStock ? 'In Stock' : 'Out of Stock'}
-          </span>
-        </div>
+        <div className="flex items-center mt-2">
+            {[...Array(5)].map((_, index) => {
+              const fullStar = Math.floor(rating); // Full stars
+              const hasHalfStar = rating % 1 !== 0; // Check if there's a half star
+              const starIndex = index + 1; // Stars are 1-based, index is 0-based
+
+              return (
+                <span key={index}>
+                  {starIndex <= fullStar ? (
+                    <i className="fas fa-star text-yellow-500"></i> // Full Star
+                  ) : starIndex === fullStar + 1 && hasHalfStar ? (
+                    <i className="fas fa-star-half-alt text-yellow-500"></i> // Half Star
+                  ) : (
+                    <i className="far fa-star text-gray-300"></i> // Empty Star
+                  )}
+                </span>
+              );
+            })}
+            <span className="ml-2 text-sm text-yellow-500">{rating}</span>
+          </div>
+
         <div className="flex justify-between mt-4">
-          <button onClick={handleViewDetails} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+          <button onClick={handleViewDetails} className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
             View Details
           </button>
-          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+          <button className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
             Add to Cart
           </button>
         </div>

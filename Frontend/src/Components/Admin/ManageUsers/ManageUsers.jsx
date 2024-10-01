@@ -40,15 +40,14 @@ function ManageUsers() {
   };
 
   // Handle search filtering
-  const handleSearch = (e) => {
+  const handleSearch =async (e) => {
     const term = e.target.value;
+    console.log('here is your search',term)
     setSearchTerm(term);
     if (term) {
-      const filtered = users.filter(user =>
-        user.email.toLowerCase().includes(term.toLowerCase()) ||
-        user.user_id.toString().includes(term)
-      );
-      setFilteredUsers(filtered);
+      const response = await fetchUsers(term);
+      console.log(response);
+      setFilteredUsers(response.data.allUsers);
     } else {
       setFilteredUsers(users);
     }

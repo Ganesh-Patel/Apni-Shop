@@ -53,17 +53,16 @@
   /* Button Container */
 .buttonContainer {
   display: flex;
-  gap: 20px; /* Space between the buttons */
+  gap: 10px; /* Space between the buttons */
   justify-content: flex-start;
   align-items: center;
-  margin-top: 20px;
 }
 
 /* Common Button Styles for Add to Cart and Wishlist */
 .addToCartButton, .wishlistButton {
   width: 150px;
   padding: 10px 20px;
-  background-color: #ffa500;
+  background-color: teal;
   border: none;
   color: white;
   cursor: pointer;

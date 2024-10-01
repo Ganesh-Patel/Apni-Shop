@@ -16,6 +16,8 @@ import ManageUsers from './Components/Admin/ManageUsers/ManageUsers.jsx';
 import ManageProducts from './Components/Admin/ManageProducts/ManageProducts.jsx';
 import AboutUs from './Components/AboutUs/AboutUs.jsx'
 import Details from './Components/Pages/ProductDetails/Details.jsx';
+import Cart from './Components/Pages/Cart/Cart.jsx';
+import WishList from './Components/Pages/WishList/WishList.jsx';
 
 function App() {
   // const { isLoggedIn } = useContext(UserContext);
@@ -62,6 +64,22 @@ function App() {
             element={
               <ProtectedRoute>
                   <ManageProducts/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                  <Cart />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/wishlist"
+            element={
+              <ProtectedRoute>
+                  <WishList />
               </ProtectedRoute>
             }
           />

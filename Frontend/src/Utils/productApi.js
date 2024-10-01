@@ -86,3 +86,31 @@ export const addToWishlist = async (id) => {
         return error;
     }
 }
+export const getFromWishlist = async (userId) => {
+    console.log('id for which we are adding to wishlist  the details ',userId)
+    try {
+        const response = await axios.get(`${API_URL}wishlist/${userId}`, {
+         withCredentials: true,
+        });
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+}
+
+export const addRatings = async (reviewData) => {
+    console.log('id for which we are adding to review  the details ')
+    try {
+        const response = await axios.post(`http://localhost:3008/api/review/addreview`,reviewData, {
+         withCredentials: true,
+        });
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+}
+

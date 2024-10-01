@@ -123,16 +123,20 @@ export const isUserLoggedIn= async (setIsLoggedIn,setUser) => {
   }
 };
 
-export const fetchUsers= async ( )=> {
+export const fetchUsers = async (searchTerm = '') => {
   try {
     const response = await axios.get(
-      `${API_URL}user/fetchusers`,
+      `${API_URL}user/fetchusers`, 
       {
+        params: { search: searchTerm },
         withCredentials: true,
       }
     );
-    if (response.statusText === "OK") return response;
+
+    if (response.statusText === "OK") {
+      return response ; // Return the data directly
+    }
   } catch (err) {
-    console.log("Error in fetching users : " + err.message);
+    console.log("Error in fetching users: " + err.message);
   }
 };
