@@ -42,31 +42,35 @@ function Home() {
   };
   return (
     <div className="min-h-screen flex flex-col mt-16 -z-0">
-        <div className="container mx-auto py-2 px-4 mt-4">
-          <CarouselHome images={images} />
+  {/* Carousel Section */}
+  <div className="w-full"> {/* Full width container for the carousel */}
+    <CarouselHome images={images} className="w-full h-[70vh]" />
+  </div>
+  
+  {/* Products Section */}
+  <div className="container mx-auto py-2 px-4 mt-4">
+    <div className="lg:w-4/5 w-full mx-auto">
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <p>Loading...</p> {/* You can add a loading spinner here */}
         </div>
-        <div className="container mx-auto py-2 px-4 mt-4">
-          <div className="lg:w-4/5 w-full">
-            {loading ? (
-              <div className="flex justify-center items-center">
-                <p>Loading...</p> {/* You can add a loading spinner here */}
+      ) : (
+        <div className="flex flex-wrap justify-center gap-4">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <div key={product._id} className="flex-shrink-0 w-80"> {/* Set a fixed width for the cards */}
+                <CreateCard product={product} />
               </div>
-            ) : (
-              <div className="flex flex-wrap justify-center gap-4">
-                {products.length > 0 ? (
-                  products.map((product) => (
-                    <div key={product._id} className="flex-shrink-0 w-80"> {/* Set a fixed width for the cards */}
-                      <CreateCard product={product} />
-                    </div>
-                  ))
-                ) : (
-                  <p>No products found.</p>
-                )}
-              </div>
-            )}
-          </div>
+            ))
+          ) : (
+            <p>No products found.</p>
+          )}
         </div>
+      )}
     </div>
+  </div>
+</div>
+
   );
 }
 
