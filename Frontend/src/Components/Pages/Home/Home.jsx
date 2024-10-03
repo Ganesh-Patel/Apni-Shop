@@ -46,8 +46,9 @@ function Home() {
   <div className="w-full"> {/* Full width container for the carousel */}
     <CarouselHome images={images} className="w-full h-[70vh]" />
   </div>
-  
-  {/* Products Section */}
+
+
+
   <div className="container mx-auto py-2 px-4 mt-4">
     <div className="lg:w-4/5 w-full mx-auto">
       {loading ? (
