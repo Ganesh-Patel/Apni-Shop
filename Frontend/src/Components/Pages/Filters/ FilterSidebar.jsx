@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { filterOptions } from './AllData/filterOptions'; // Adjust the path as necessary
 
 const FilterSidebar = ({ filters, onFilterChange }) => {
+
+  const [searchTerm, setSearchTerm] = useState('');
   const [showAll, setShowAll] = useState({
     brand: false,
     category: false,
@@ -88,6 +90,15 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
       >
         Clear All Filters
       </button>
+      <div className="flex flex-wrap mb-4">
+        <input
+          type="text"
+          name="search"
+          placeholder="Search products..."
+          className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
+        />
+      </div>
+
 
       {filterOptions.map((filter, index) => {
         const isBrandOrCategory = filter.label === 'Brand' || filter.label === 'Category';
