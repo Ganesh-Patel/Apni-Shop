@@ -3,13 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa'; // Import FontAwesome heart icons
 import { addToWishlist } from '../../../Utils/productApi';
 import { UserContext } from '../../../Contexts/UserContext';
+import { CartContext } from '../../../Contexts/CartContext.jsx';
 import { toast } from 'react-toastify';
+import { addProductToCart } from '../../../Utils/cartApi.js';
 
 const CreateCard = ({ product }) => {
   const { _id, name, description, price, rating, inStock, images } = product;
   const image = images[0]; // Accessing the first image from the array
   const navigate = useNavigate();
   const { isLoggedIn, loading } = useContext(UserContext);
+  const {addItemToCart}=useContext(CartContext);
 
   // State to track if the item is added to the wishlist
   const [inWishlist, setInWishlist] = useState(false);
@@ -23,6 +26,21 @@ const CreateCard = ({ product }) => {
   const handleViewDetails = () => {
     navigate(`/product/${_id}`);
   };
+  const handleAddToCart = async () => {
+    console.log('adding item to cart fro card page')
+    try {
+        const { _id: _id, quantity = 1, attributes = [] } = product;
+        
+        const response = await addItemToCart({_id, quantity, attributes}); 
+
+        if (response) {
+            toast.success('Item added to cart!'); 
+        }
+    } catch (error) {
+        console.error('Error adding item to cart:', error); 
+        toast.error('Failed to add item to cart.'); 
+    }
+};
 
   const toggleWishlist = async () => {
     if (isLoggedIn) {
@@ -83,7 +101,7 @@ const CreateCard = ({ product }) => {
           <button onClick={handleViewDetails} className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
             View Details
           </button>
-          <button className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
+          <button onClick={handleAddToCart}  className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
             Add to Cart
           </button>
         </div>

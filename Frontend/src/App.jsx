@@ -41,6 +41,7 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/product/:id" element={<Details />} />
+          <Route path="/cart" element={<Cart/>} />
 
           {/* Protected Routes - only accessible if logged in */}
           <Route
@@ -67,14 +68,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-           <Route
+           {/* <Route
             path="/cart"
             element={
               <ProtectedRoute>
                   <Cart />
               </ProtectedRoute>
             }
-          />
+          /> */}
            <Route
             path="/wishlist"
             element={

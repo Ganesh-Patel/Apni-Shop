@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getSingleProducts, addToWishlist } from '../../../Utils/productApi.js';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
 import RatingModal from '../ProductDetails/RatingModal.jsx'; // Import the modal component
+import { addProductToCart } from '../../../Utils/cartApi.js';
+import { CartContext } from '../../../Contexts/CartContext.jsx';
 
 function Details() {
     const { id } = useParams();
@@ -14,6 +16,7 @@ function Details() {
     const [isInWishlist, setIsInWishlist] = useState(false);
     const [showModal, setShowModal] = useState(false); // Modal state
     const { isLoggedIn } = useContext(UserContext);
+    const {addItemToCart}=useContext(CartContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,9 +46,23 @@ function Details() {
         return <div className={styles.details}>No details available.</div>;
     }
 
-    const handleAddToCart = () => {
-        toast.success('Item added to cart!');
-    };
+   
+const handleAddToCart = async () => {
+    try {
+        const { _id: _id, quantity = 1, attributes = [] } = details;
+
+        console.log('product details before adding to cart ',details)
+        
+        const response = await addItemToCart({_id, quantity, attributes}); 
+
+        if (response) {
+            toast.success('Item added to cart!'); 
+        }
+    } catch (error) {
+        console.error('Error adding item to cart:', error); 
+        toast.error('Failed to add item to cart.'); 
+    }
+};
 
     const toggleWishlist = async () => {
         if (isLoggedIn) {
