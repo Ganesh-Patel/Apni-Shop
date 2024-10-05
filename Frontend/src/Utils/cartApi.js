@@ -34,6 +34,20 @@ export const getCart = async () => {
   }
 };
 
+export const updateQuantity = async ( productId, newQuantity ) => {
+    try {
+      const response = await axios.put(`${API_URL}/update-quantity`,{productId, newQuantity }, {
+        withCredentials: true,
+      });
+  
+      return response.data;
+    } catch (error) {
+      console.error('Error in updating quantity :', error);
+      throw error;
+    }
+  };
+  
+
 // Remove product from cart
 export const removeProductFromCart = async (productId) => {
   try {
@@ -56,7 +70,6 @@ export const clearCart = async () => {
     const response = await axios.post(`${API_URL}/clearcart`, {}, {
       withCredentials: true,
     });
-
     return response.data;
   } catch (error) {
     console.error('Error clearing cart:', error);

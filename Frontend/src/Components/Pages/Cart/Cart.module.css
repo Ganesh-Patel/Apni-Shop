@@ -1,226 +1,208 @@
 .cartContainer {
-    margin-top: 10vh;
-    width: 100%;
-    padding: 20px;
-    background-color: #f1f1f1;
-    box-sizing: border-box;
-  }
-  
-  .emptyCart {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ddd;
-    padding: 50px 20px;
-    background-color: #fff;
-    border-radius: 8px;
-  }
-  
-  .emptyCartImage {
-    width: 15rem;
-    margin-bottom: 20px;
-  }
-  
-  .emptyCartTitle {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .emptyCartText {
-    text-align: center;
-  }
-  
-  .shopDeals {
-    margin-top: 15px;
-    cursor: pointer;
-    color: #0073e6;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .shopDeals:hover {
-    text-decoration: underline;
-  }
-  
-  .buttons {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .signInButton,
-  .signUpButton {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 20px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-  }
-  
-  .signInButton {
-    background-color: #f7ca01;
-    color: #333;
-  }
-  
-  .signInButton:hover {
-    background-color: #ffd814;
-  }
-  
-  .signUpButton {
-    background-color: #fff;
-    color: #0073e6;
-    border: 1px solid #0073e6;
-  }
-  
-  .signUpButton:hover {
-    background-color: #0073e6;
-    color: #fff;
-  }
-  
-  .cartItems {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .cartItem {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding: 15px 0;
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 15px;
-  }
-  
-  .itemImage {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    margin-right: 20px;
-    border-radius: 8px;
-  }
-  
-  .itemDetails {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .itemName {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 0;
-    color: #333;
-  }
-  
-  .itemPrice {
-    font-size: 1rem;
-    color: #666;
-  }
-  
-  .quantityControls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .quantityButton {
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    font-size: 1.2rem;
-    color: #333;
-  }
-  
-  .deleteButton {
-    background-color: #dc3545;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    cursor: pointer;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    align-self: flex-start;
-  }
-  
-  .deleteButton:hover {
-    background-color: #c82333;
-  }
-  
-  .totalPriceContainer {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .totalPrice {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .payNowButton {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  .payNowButton:disabled {
-    background-color: #c8c8c8;
-    cursor: not-allowed;
-  }
-  
-  .payNowButton:hover:not(:disabled) {
-    background-color: #218838;
-  }
-  
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    .cartItem {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 15px;
-    }
-  
-    .itemImage {
-      margin-bottom: 10px;
-    }
-  
-    .quantityControls,
-    .totalPriceContainer {
-      justify-content: center;
-    }
-  
-    .buttons {
-      flex-direction: column;
-      gap: 15px;
-    }
-  
-    .totalPriceContainer {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-  }
-  
+  margin-top: 10vh;
+  width: 100%;
+  padding: 20px;
+  background-color: #f1f1f1;
+  box-sizing: border-box;
+}
+
+.emptyCart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  padding: 50px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.emptyCartImage {
+  width: 15rem;
+  margin-bottom: 20px;
+}
+
+.emptyCartTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.emptyCartText {
+  text-align: center;
+}
+
+.shopDeals {
+  margin-top: 15px;
+  cursor: pointer;
+  color: #0073e6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.shopDeals:hover {
+  text-decoration: underline;
+}
+
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.signInButton,
+.signUpButton {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.signInButton {
+  background-color: #f7ca01;
+  color: #333;
+}
+
+.signInButton:hover {
+  background-color: #ffd814;
+}
+
+.signUpButton {
+  background-color: #fff;
+  color: #0073e6;
+  border: 1px solid #0073e6;
+}
+
+.signUpButton:hover {
+  background-color: #0073e6;
+  color: #fff;
+}
+
+.cartItems {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  transition: box-shadow 0.3s ease;
+}
+
+.cartItem:hover {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.itemImage {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 8px;
+}
+
+.itemDetails {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.itemName {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+}
+
+.itemPrice {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.totalItemPrice {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.quantityControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantityButton {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.deleteButton {
+  width: 100px;
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.totalPriceContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.totalPrice {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.payNowButton {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.payNowButton:hover {
+  background-color: #218838;
+}

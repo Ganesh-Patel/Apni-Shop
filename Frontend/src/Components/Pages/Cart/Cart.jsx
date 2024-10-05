@@ -6,19 +6,16 @@ import style from './Cart.module.css';
 
 function Cart() {
   const navigate = useNavigate();
-  const { cart, addItemToCart, removeItemFromCart } = useContext(CartContext);
+  const { cart, addItemToCart, removeItemFromCart ,updateQuan,deleteCart} = useContext(CartContext);
   const { isLoggedIn } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const cartItems = cart?.cart.products || [];
 
-  console.log('cart items for cart page ',cartItems)
-
-  // Update total price whenever cart items change
   useEffect(() => {
     const calculateTotalPrice = () => {
       const total = cartItems.reduce((sum, item) => {
-        const price = Number(item.price) || 0; 
+        const price = Number(item.product.price) || 0; 
         const count = Number(item.count) || 0;
         return sum + price * count;
       }, 0);
@@ -27,24 +24,34 @@ function Cart() {
   
     calculateTotalPrice();
   }, [cartItems]);
-  
 
-  // Handle quantity increase/decrease
-  const onUpdateItemQuantity = async (productId, newQuantity) => {
-    if (newQuantity > 0) {
-      await addItemToCart({ id: productId, quantity: newQuantity }); 
+  const onUpdateItemQuantity = async (productId, newQuantity,action) => {
+    try {
+      if (newQuantity > 0) {   
+        console.log('updating the product quantity')
+        const response = await updateQuan(productId, newQuantity);
+        console.log(response)
     } else {
+      console.log('deleting the product quantity')
       await removeItemFromCart(productId); 
+    }
+    } catch (error) {
+      console.log(error)
     }
   };
 
-  // Handle removing an item from the cart
   const onDeleteItem = async (productId) => {
-    console.log('we are going to delete items into cart ',productId)
     await removeItemFromCart(productId);
   };
 
-  // Redirect to login page if not logged in
+  const handleClearCart=async()=>{
+    try{
+      const response=await deleteCart();
+      console.log(response)
+    }catch(error){
+      console.log('error')
+    }
+  }
   if (!isLoggedIn) {
     return (
       <div className={style.cartContainer}>
@@ -73,34 +80,41 @@ function Cart() {
     );
   }
 
-  // Render cart items if logged in and items exist
   return (
     <div className={style.cartContainer}>
+      <div className={style.cartHeader}>
+        <h1 className='text-teal-500 font-extrabold text-center'>Your Cart</h1>
+        <div >
+            <button onClick={handleClearCart}   className='bg-red-400 rounded-xl py-2 px-4'>Clear Cart</button>
+        </div>
+      </div>
       {cartItems.length > 0 ? (
         <>
           <div className={style.cartItems}>
             {cartItems.map((item) => (
               <div className={style.cartItem} key={item._id}>
-                <img src={item.image} alt={item.name} className={style.itemImage} />
+                <img src={item.product.images[0]} alt={item.product.name} className={style.itemImage} />
                 <div className={style.itemDetails}>
-                  <h3 className={style.itemName}>{item.name}</h3>
-                  <p className={style.itemPrice}>₹{item.price}</p>
+                  <h3 className={style.itemName}>{item.product.name}</h3>
+                  <p className={style.description}>₹{item.product.description}</p>
+                  <p className={style.itemPrice}>Price: ₹{item.product.price}</p>
                   <div className={style.quantityControls}>
                     <button
                       className={style.quantityButton}
-                      onClick={() => onUpdateItemQuantity(item._id, item.quantity - 1)}
-                      disabled={item.quantity <= 1}
+                      onClick={() => onUpdateItemQuantity(item._id, item.count - 1,"decrease")}
+                      disabled={item.count <= 1}
                     >
                       -
                     </button>
                     <span className={style.count}>{item.count}</span>
                     <button
                       className={style.quantityButton}
-                      onClick={() => onUpdateItemQuantity(item._id, item.quantity + 1)}
+                      onClick={() => onUpdateItemQuantity(item._id, item.count + 1,"increase")}
                     >
                       +
                     </button>
                   </div>
+                  <p className={style.totalItemPrice}>Total: ₹{(item.product.price * item.count).toFixed(2)}</p>
                   <button className={style.deleteButton} onClick={() => onDeleteItem(item._id)}>
                     Remove
                   </button>
@@ -120,7 +134,6 @@ function Cart() {
           </div>
         </>
       ) : (
-        <div className={style.cartContainer}>
         <div className={style.emptyCart}>
           <img
             src="https://m.media-amazon.com/images/G/31/cart/empty/kettle-desaturated._CB424694257_.svg"
@@ -132,10 +145,8 @@ function Cart() {
             <div className={style.shopDeals} onClick={() => navigate('/home')}>
               <p>Shop today's deals</p>
             </div>
-    
           </div>
         </div>
-      </div>
       )}
     </div>
   );

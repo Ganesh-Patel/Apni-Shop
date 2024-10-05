@@ -25,7 +25,7 @@ function AdminDashboard() {
                         </button>
                     </div>
                     <nav className="mt-10 flex-grow">
-                        {['Orders', 'Users', 'Products', 'Sales', 'Settings'].map((item) => (
+                        {['Orders', 'Users', 'Products','Coupons', 'Sales', 'Settings'].map((item) => (
                             <Link
                                 to={`/${item.toLowerCase()}`}
                                 key={item}

@@ -18,6 +18,7 @@ import AboutUs from './Components/AboutUs/AboutUs.jsx'
 import Details from './Components/Pages/ProductDetails/Details.jsx';
 import Cart from './Components/Pages/Cart/Cart.jsx';
 import WishList from './Components/Pages/WishList/WishList.jsx';
+import ManageCoupons from './Components/Admin/ManageCoupons/ManageCoupons.jsx';
 
 function App() {
   // const { isLoggedIn } = useContext(UserContext);
@@ -65,6 +66,14 @@ function App() {
             element={
               <ProtectedRoute>
                   <ManageProducts/>
+              </ProtectedRoute>
+            }
+          />
+             <Route
+            path="/coupons"
+            element={
+              <ProtectedRoute>
+                  <ManageCoupons/>
               </ProtectedRoute>
             }
           />
