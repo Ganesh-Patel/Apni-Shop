@@ -62,7 +62,7 @@ const Shop = () => {
             <div className="flex flex-wrap justify-center gap-4">
               {products.length > 0 ? (
                 products.map((product) => (
-                  <div key={product._id} className="flex-shrink-0 w-80"> {/* Set a fixed width for the cards */}
+                  <div key={product._id} className="flex-shrink-0 w-60"> {/* Set a fixed width for the cards */}
                     <CreateCard product={product} />
                   </div>
                 ))

@@ -59,7 +59,7 @@ const CreateCard = ({ product }) => {
   };
   return (
     <div className="bg-white rounded-lg shadow-lg max-w-sm w-full m-4 transition-transform transform hover:scale-105 overflow-hidden relative">
-      <img src={image} alt={name} className="rounded-t-lg w-full h-48 object-cover p-2" />
+      <img src={image} alt={name} className="rounded-t-lg w-full h-48 object-contain p-2" />
       <div className="p-4">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold text-gray-800 truncate">{name}</h2>
@@ -97,11 +97,11 @@ const CreateCard = ({ product }) => {
             <span className="ml-2 text-sm text-yellow-500">{rating}</span>
           </div>
 
-        <div className="flex justify-between mt-4">
-          <button onClick={handleViewDetails} className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
+        <div className="flex flex-col justify-between mt-4 gap-2">
+          <button onClick={handleViewDetails} className="bg-teal-500 text-white px-2 py-1 rounded hover:bg-teal-700 transition">
             View Details
           </button>
-          <button onClick={handleAddToCart}  className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
+          <button onClick={handleAddToCart}  className="bg-teal-500 text-white px-2 py-1 rounded hover:bg-teal-700 transition">
             Add to Cart
           </button>
         </div>

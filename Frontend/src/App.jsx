@@ -19,18 +19,20 @@ import Details from './Components/Pages/ProductDetails/Details.jsx';
 import Cart from './Components/Pages/Cart/Cart.jsx';
 import WishList from './Components/Pages/WishList/WishList.jsx';
 import ManageCoupons from './Components/Admin/ManageCoupons/ManageCoupons.jsx';
+import ChatBot from 'react-chatbotify';
 
 function App() {
   // const { isLoggedIn } = useContext(UserContext);
   const location = useLocation(); 
   // Pages that should NOT have the Header and Footer
-  const noHeaderFooterRoutes = ['/login', '/signup', '/forgotpassword','/verifyemail','/VerifyEmail'];
+  const noHeaderFooterRoutes = ['/login', '/signup', '/forgotpassword','/verifyemail','/VerifyEmail','/admin-dashboard'];
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Conditionally render Header and Footer if the route is not in noHeaderFooterRoutes */}
       {!noHeaderFooterRoutes.includes(location.pathname) && <Header />}
       <div className="flex-grow">
+      <ChatBot className="fixed bottom-0 right-0 z-1000"/>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
@@ -93,6 +95,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+    
         </Routes>
       </div>
 

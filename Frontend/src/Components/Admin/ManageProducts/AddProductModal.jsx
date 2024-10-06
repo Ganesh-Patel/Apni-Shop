@@ -59,8 +59,8 @@ function AddProductModal({ onClose, refreshProducts }) {
     };
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-            <div className="bg-white p-5 rounded-lg w-full max-w-md">
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/2 h-3/5 max-h-[80vh] overflow-y-auto">
                 <h2 className="text-xl font-bold mb-4">Add New Product</h2>
 
                 {loading ? (

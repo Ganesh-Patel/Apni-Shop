@@ -27,8 +27,8 @@ function UpdatteCouponsModal({ coupon, onClose, refreshCoupons, onUpdate }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/2 h-4/5 max-h-[100vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">Edit Coupon</h2>
         <form onSubmit={handleUpdateCoupon}>
           {/* Coupon Code */}

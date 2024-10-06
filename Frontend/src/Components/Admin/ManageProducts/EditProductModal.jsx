@@ -60,8 +60,8 @@ function EditProductModal({ product, onClose, refreshProducts, editProduct }) {
     }
   };
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/2 h-3/5 max-h-[80vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
         <form encType="multipart/form-data" onSubmit={handleUpdateProduct}>
           {/* Image Upload */}

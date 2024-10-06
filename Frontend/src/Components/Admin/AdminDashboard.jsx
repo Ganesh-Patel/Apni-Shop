@@ -14,9 +14,9 @@ function AdminDashboard() {
     };
 
     return (
-        <div className="flex h-screen mt-8">
+        <div className="flex  h-screen top-0">
             {/* Sidebar */}
-            <div className={`fixed z-10 bg-gray-700 h-[calc(100vh-2rem)] mt-8 w-64 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}>
+            <div className={`fixed z-10 bg-gray-800 h-full transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-64 top-0`}>
                 <div className="flex flex-col h-full text-white">
                     <div className="p-4 text-2xl font-bold bg-teal-900 flex justify-between items-center">
                         Admin Dashboard
@@ -25,11 +25,11 @@ function AdminDashboard() {
                         </button>
                     </div>
                     <nav className="mt-10 flex-grow">
-                        {['Orders', 'Users', 'Products','Coupons', 'Sales', 'Settings'].map((item) => (
+                        {['Orders', 'Users', 'Products', 'Coupons', 'Sales', 'Settings'].map((item) => (
                             <Link
                                 to={`/${item.toLowerCase()}`}
                                 key={item}
-                                className="block p-4 hover:bg-teal-700"
+                                className="block p-4 hover:bg-teal-700 transition-colors duration-200"
                                 onClick={handleCloseSidebar}
                             >
                                 {item}
@@ -40,7 +40,7 @@ function AdminDashboard() {
             </div>
 
             {/* Main Content */}
-            <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : ''}`}>
+            <div className={`flex-1 transition-all duration-300 ml-0 ${isSidebarOpen ? 'md:ml-64' : ''}`}>
                 <div className="flex items-center justify-between p-4 bg-white shadow-md">
                     <button
                         className="text-gray-700 md:hidden"
@@ -50,8 +50,11 @@ function AdminDashboard() {
                     </button>
                 </div>
 
-                <div className="p-4 flex justify-center items-center h-full">
-                    <h2 className="text-3xl text-gray-700">Welcome to the Admin Dashboard</h2>
+                <div
+                    className=" flex items-center justify-center h-full bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: "url('https://png.pngtree.com/thumb_back/fh260/background/20211118/pngtree-technology-round-dashboard-image_908915.jpg')" }}
+                >
+                    <h2 className="text-3xl font-bold text-white">Welcome to the Admin Dashboard</h2>
                 </div>
             </div>
 

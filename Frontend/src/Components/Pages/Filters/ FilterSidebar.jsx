@@ -85,7 +85,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
   return (
     <div className="w-full lg:w-full p-4 border-r border-gray-300">
       <button
-        className="w-1/2 bg-teal-500 text-white py-2 mb-4 rounded hover:bg-teal-800"
+        className="w-full bg-teal-500 text-white py-2 mb-4 rounded hover:bg-teal-800"
         onClick={clearAllFilters}
       >
         Clear All Filters

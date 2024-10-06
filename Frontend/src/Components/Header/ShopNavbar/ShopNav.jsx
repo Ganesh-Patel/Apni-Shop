@@ -81,7 +81,7 @@ const categories = [
     ],
   },
   {
-    name: 'Home & Furniture',
+    name: 'Home',
     subcategories: [
       'Furniture',
       'Bedding',
@@ -109,7 +109,7 @@ const categories = [
     ],
   },
   {
-    name: 'Sports & Outdoors',
+    name: 'Sports',
     subcategories: [
       'Fitness Equipment',
       'Outdoor Gear',
@@ -151,7 +151,7 @@ const categories = [
     ],
   },
   {
-    name: 'Toys & Baby Products',
+    name: 'Baby Products',
     subcategories: [
       'Toys',
       'Baby Gear',
@@ -193,7 +193,7 @@ const ShopNav = () => {
   };
 
   return (
-    <nav className="bg-gray-100 text-black">
+    <nav className="bg-gray-100 text-black border border-gray-300 border-opacity-50 ">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Hamburger Icon for Mobile View */}
         <div className="lg:hidden">
@@ -219,30 +219,30 @@ const ShopNav = () => {
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
             >
-              <a
-                href="#"
+              <Link
+                to={`/shop/${category.name.toLowerCase()}`}
                 onClick={(e) => {
                   e.preventDefault();
                   handleCategoryClick(category.name);
                 }}
-                className="hover:text-yellow-500"
+                className="hover:text-teal-500"
               >
                 {category.name}
-              </a>
+              </Link>
 
               {dropdown === index && (
                 <ul className="absolute bg-white shadow-lg rounded-lg z-50">
                   {category.subcategories.map((subcategory, subIndex) => (
-                    <li key={subIndex} className="px-4 py-2 hover:bg-gray-200">
-                      <a
-                        href="#"
+                    <li key={subIndex} className="px-4 py-2 hover:bg-teal-200">
+                      <Link
+                        to="#"
                         onClick={(e) => {
                           e.preventDefault();
                           handleSubcategoryClick(category.name, subcategory);
                         }}
                       >
                         {subcategory}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

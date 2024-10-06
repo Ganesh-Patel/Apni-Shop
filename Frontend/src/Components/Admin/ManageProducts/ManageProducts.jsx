@@ -140,6 +140,7 @@ function ManageProducts() {
                 </button>
             </div>
 
+            {isModalOpen && <AddProductModal onClose={handleModalClose} refreshProducts={getProducts}  />}
             <input
                 type="text"
                 placeholder="Search by product name or ID"
@@ -148,7 +149,6 @@ function ManageProducts() {
                 className="mt-2 p-2 border border-gray-300 rounded-md w-full"
             />
 
-            {isModalOpen && <AddProductModal onClose={handleModalClose} refreshProducts={getProducts} />}
 
             <div className="overflow-x-auto"> {/* This will allow horizontal scrolling */}
                 <table className="min-w-full bg-white border-collapse border border-gray-300 mt-5 mb-4">
