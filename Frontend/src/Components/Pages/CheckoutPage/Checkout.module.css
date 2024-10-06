@@ -1,0 +1,65 @@
+.checkoutContainer {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 10vh;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cartItems {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .cartItem {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .itemImage {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .itemDetails {
+    flex-grow: 1;
+  }
+  
+  .deliveryAddress, .couponContainer, .totalPriceContainer, .paymentSection {
+    margin-bottom: 20px;
+  }
+  
+  .addressInput, .couponInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .payNowButton, .backButton, .couponButton {
+    padding: 10px 20px;
+    background-color: teal;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .orderSuccess {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .successAnimation {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .successImage {
+    width: 150px;
+  }
+  

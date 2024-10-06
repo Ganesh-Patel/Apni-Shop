@@ -19,6 +19,7 @@ import Details from './Components/Pages/ProductDetails/Details.jsx';
 import Cart from './Components/Pages/Cart/Cart.jsx';
 import WishList from './Components/Pages/WishList/WishList.jsx';
 import ManageCoupons from './Components/Admin/ManageCoupons/ManageCoupons.jsx';
+import CheckoutPage from './Components/Pages/CheckoutPage/CheckoutPage.jsx';
 import ChatBot from 'react-chatbotify';
 
 function App() {
@@ -92,6 +93,14 @@ function App() {
             element={
               <ProtectedRoute>
                   <WishList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                  <CheckoutPage />
               </ProtectedRoute>
             }
           />
