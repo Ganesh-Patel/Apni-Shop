@@ -20,7 +20,7 @@ import Cart from './Components/Pages/Cart/Cart.jsx';
 import WishList from './Components/Pages/WishList/WishList.jsx';
 import ManageCoupons from './Components/Admin/ManageCoupons/ManageCoupons.jsx';
 import CheckoutPage from './Components/Pages/CheckoutPage/CheckoutPage.jsx';
-import ChatBot from 'react-chatbotify';
+import ChatBots from './Chatbot/ChatBoats.jsx';
 
 function App() {
   // const { isLoggedIn } = useContext(UserContext);
@@ -33,7 +33,7 @@ function App() {
       {/* Conditionally render Header and Footer if the route is not in noHeaderFooterRoutes */}
       {!noHeaderFooterRoutes.includes(location.pathname) && <Header />}
       <div className="flex-grow">
-      <ChatBot className="fixed bottom-0 right-0 z-1000"/>
+      <ChatBots className="fixed bottom-0 right-0 z-1000"/>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />

@@ -1,0 +1,15 @@
+.error {
+    color: red;
+    font-size: 0.85em;
+  }
+  
+  .form-control {
+    border-radius: 0.25rem;
+    border: 1px solid #008080;
+  }
+  
+  .form-control:focus {
+    border-color: #005f5f;
+    box-shadow: 0 0 5px rgba(0, 128, 128, 0.5);
+  }
+  
