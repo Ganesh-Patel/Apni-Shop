@@ -4,6 +4,7 @@ import { CartContext } from '../../../Contexts/CartContext.jsx';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
 import style from './Cart.module.css';
 
+
 function Cart() {
   const navigate = useNavigate();
   const { cart, addItemToCart, removeItemFromCart ,updateQuan,deleteCart} = useContext(CartContext);

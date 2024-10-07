@@ -7,21 +7,23 @@ import {
   updateAddress,
   deleteAddress,
 } from '../../../Utils/addressApi.js'; // Import the API methods
+import { valiDateCoupon } from '../../../Utils/couponsApi.js';
 import AddressModal from '../DeliveryAddress/AddressModal.jsx';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
 
 function Checkout() {
   const { cart } = useContext(CartContext);
   const navigate = useNavigate();
-  const [totalPrice, setTotalPrice] = useState(cart?.cart?.totalPrice || 0);
+  const [totalPrice, setTotalPrice] = useState(cart?.cart?.cartTotal || 0);
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentAddress, setCurrentAddress] = useState(null); // To handle address update
-  const [coupon, setCoupon] = useState('');
+  const [couponCode, setCouponCode] = useState('');
   const [couponValid, setCouponValid] = useState(null);
   const [isPaymentDone, setIsPaymentDone] = useState(false);
+  const[couponValidMessage,setCouponValidMessage]=useState('');
   const{user}=useContext(UserContext);
   
 
@@ -42,14 +44,40 @@ function Checkout() {
     fetchAddresses(); // Fetch addresses on component mount
   }, []);
 
-  const handleCouponApply = () => {
-    if (coupon === 'SAVE10') {
-      setCouponValid(true);
-      setTotalPrice(prevTotal => prevTotal * 0.9);
-    } else {
+  const handleCouponApply = async () => {
+    try {
+      const totalPriceBeforeDiscount = totalPrice;
+      const response = await valiDateCoupon(couponCode, totalPrice);
+  
+      if (response.status === 200) {
+        setCouponValid(true);
+        const { discount, isPercentage, message } = response.data;
+  
+        // Set the success message from the backend
+        setCouponValidMessage(message || 'Coupon applied successfully!');
+  
+        // Apply the discount based on its type
+        const newTotalPrice = isPercentage 
+          ? totalPriceBeforeDiscount * (1 - discount / 100) 
+          : totalPriceBeforeDiscount - discount;
+  
+        // Ensure the total price doesn't go below zero
+        setTotalPrice(Math.max(newTotalPrice, 0));
+      } else {
+        setCouponValid(false);
+        console.log(response.data);
+        // Set the error message from the backend response
+        setCouponValidMessage(response.data?.message || 'Invalid or expired coupon');
+      }
+    } catch (error) {
+      // Handle any network or other errors
+      const errorMessage = error.response?.data?.message || 'Network Error';
       setCouponValid(false);
+      setCouponValidMessage(errorMessage);
+      console.error('Error applying the coupon:', errorMessage);
     }
   };
+  
 
   const handlePayment = () => {
     setTimeout(() => {
@@ -146,8 +174,8 @@ function Checkout() {
         <div className="flex space-x-4">
           <input
             type="text"
-            value={coupon}
-            onChange={(e) => setCoupon(e.target.value)}
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
             placeholder="Enter coupon code"
             className="flex-1 p-2 border rounded-md"
           />
@@ -158,8 +186,8 @@ function Checkout() {
             Apply Coupon
           </button>
         </div>
-        {couponValid === true && <p className="text-green-500 mt-2">Coupon Applied Successfully!</p>}
-        {couponValid === false && <p className="text-red-500 mt-2">Invalid Coupon Code</p>}
+        {couponValid === true && <p className="text-green-500 mt-2">{couponValidMessage}</p>}
+        {couponValid === false && <p className="text-red-500 mt-2">{couponValidMessage}</p>}
       </div>
 
       {/* Total Price */}

@@ -64,3 +64,15 @@ export const createCoupon = async (couponData) => {
       throw error.response ? error.response.data : new Error('Network Error');
     }
   };
+  export const valiDateCoupon = async (couponCode, totalPrice) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/validate-coupon`,{couponCode, totalPrice},{
+        withCredentials:true
+      });
+      return response;
+    } catch (error) {
+      console.error('Error deleting coupon:', error);
+      return error.response ? error.response.data.message :'Network Error';
+    }
+  };
+
