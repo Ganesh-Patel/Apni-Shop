@@ -25,9 +25,9 @@ export const CartProvider = ({ children }) => {
             try {
                 console.log('user status before adding to cart ', isLoggedIn)
                 if (isLoggedIn) {
-                    const cartItems = await getCart();
-                    console.log('cart items ', cartItems)
-                    setCart(cartItems);
+                    const data = await getCart();
+                    console.log('cart items ', data)
+                    setCart(data.cart);
                 } else {
                     const guestCart = JSON.parse(localStorage.getItem('guestCart')) || [];
                     setCart(guestCart);
@@ -74,8 +74,9 @@ export const CartProvider = ({ children }) => {
 
     const updateQuan = async (productId, newQuantity) => {
         try {
-            const updatedCart = await updateQuantity(productId, newQuantity);
-            setCart(updatedCart);
+            const data = await updateQuantity(productId, newQuantity);
+            console.log(data.updatedCart)
+            setCart(data.updatedCart);
         } catch (error) {
             console.error('Error updating quantity:', error);
         }

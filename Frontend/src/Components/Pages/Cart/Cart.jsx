@@ -10,8 +10,10 @@ function Cart() {
   const { cart, addItemToCart, removeItemFromCart ,updateQuan,deleteCart} = useContext(CartContext);
   const { isLoggedIn } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
-
-  const cartItems = cart?.cart.products || [];
+console.log(cart)
+console.log(cart?cart.products:[])
+  const cartItems = cart?cart.products:[];
+  console.log(cartItems)
 
   useEffect(() => {
     const calculateTotalPrice = () => {
