@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../../Contexts/CartContext.jsx';
+import Razorpay from 'react-razorpay';
 import {
   createAddress,
   getAllAddresses,
@@ -107,7 +108,51 @@ function Checkout() {
     setDisCountedPrice(totalPrice);
   };
 
-  const handlePayment = async () => {
+//   const handlePayment = async () => {
+//     if (!selectedAddress) {
+//       alert('Please select a delivery address.');
+//       return;
+//     }
+  
+//     try {
+//       const orderId = `ORDER-${Date.now()}`;
+//       const orderDetails = {
+//         orderId, 
+//         userId: user._id,
+//         totalPrice: totalPrice, 
+//         discountedPrice: discountedPrice || totalPrice, 
+//         paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
+//         orderDate: new Date(), // Order date and time
+//         addressId: selectedAddress,
+//         products: cartItems.map((item) => ({
+//           productId: item.product._id,
+//           productName: item.product.name,
+//           quantity: item.count,
+//           price: item.product.price,
+//           discountedPrice: item.product.price, 
+//           total: item.product.price * item.count,
+//           deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
+//         })),
+//       };
+  
+//       console.log('Order placed:', orderDetails);
+//       const response=await placeOrder(orderDetails);
+//       console.log(response)
+  
+//       setOrders(orderDetails);
+  
+//       setIsPaymentDone(true);
+//       deleteCart();
+
+//       setTimeout(() => {
+//         navigate('/orders');
+//       }, 2000);
+//     } catch (error) {
+//       console.error('Error placing orders:', error.message);
+//     }
+//   };
+  
+const handlePayment = async () => {
     if (!selectedAddress) {
       alert('Please select a delivery address.');
       return;
@@ -121,33 +166,69 @@ function Checkout() {
         totalPrice: totalPrice, 
         discountedPrice: discountedPrice || totalPrice, 
         paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
-        orderDate: new Date(), // Order date and time
+        orderDate: new Date(),
         addressId: selectedAddress,
         products: cartItems.map((item) => ({
           productId: item.product._id,
           productName: item.product.name,
           quantity: item.count,
           price: item.product.price,
-          discountedPrice: item.product.price, 
+          discountedPrice: item.product.price,
           total: item.product.price * item.count,
           deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
         })),
       };
   
-      console.log('Order placed:', orderDetails);
-      const response=await placeOrder(orderDetails);
-      console.log(response)
+      const options = {
+        key: "rzp_test_FxRK4tM1aleKRe",
+        key_secret: "pxZi3HhnspLHh5kMQbqxMamd",
+        amount: parseInt(totalPrice) * 100, // Amount in paisa
+        currency: 'INR',
+        name: 'Amazon',
+        description: 'Test Transaction',
+        image: 'https://i.pinimg.com/736x/8a/b0/12/8ab0121c7d7a90f6415b4b0edaf035d9.jpg',
+        order_id: orderId, // Pass the order ID for tracking purposes
+        handler: async function (response) {
+          console.log('Payment Response:', response);
+          
+          // Proceed with order placement
+          const responseFromServer = await placeOrder(orderDetails);
+          console.log('Server Response:', responseFromServer);
   
-      setOrders(orderDetails);
+          setOrders(orderDetails); // Update the state with the new order
+          setIsPaymentDone(true); // Mark the payment as done
+          deleteCart(); // Clear the cart
   
-      setIsPaymentDone(true);
-      deleteCart();
-
-      setTimeout(() => {
-        navigate('/orders');
-      }, 2000);
+          // Navigate to the orders page after a short delay
+          setTimeout(() => {
+            navigate('/orders');
+          }, 2000);
+          
+          toast('Payment Successful!');
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+          contact: user.phone || '9999999999'
+        },
+        notes: {
+          address: 'Delivery Address'
+        },
+        theme: {
+          color: '#F7CA01'
+        }
+      };
+  
+      const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+  
+        paymentObject.on('payment.failed', function (response) {
+        console.error('Payment Failed:', response.error);
+        alert('Payment failed. Please try again.');
+      });
+  
     } catch (error) {
-      console.error('Error placing orders:', error.message);
+      console.error('Error during payment or placing the order:', error.message);
     }
   };
   

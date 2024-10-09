@@ -58,8 +58,8 @@ const CreateCard = ({ product }) => {
     }
   };
   return (
-    <div className="bg-white rounded-lg shadow-lg max-w-sm w-full m-4 transition-transform transform hover:scale-105 overflow-hidden relative">
-      <img src={image} alt={name} className="rounded-t-lg w-full h-48 object-contain p-2" />
+    <div   className="bg-white rounded-lg shadow-lg max-w-sm w-full m-4 transition-transform transform hover:scale-105 overflow-hidden relative">
+      <img onClick={handleViewDetails} src={image} alt={name} className="rounded-t-lg w-full h-48 object-contain p-2" />
       <div className="p-4">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold text-gray-800 truncate">{name}</h2>

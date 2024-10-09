@@ -2,30 +2,30 @@ import React, { useState, useEffect } from 'react';
 import FilterSidebar from '../../Pages/Filters/ FilterSidebar.jsx';
 import ShopNav from '../../Header/ShopNavbar/ShopNav';
 import { getAllProducts } from '../../../Utils/productApi.js';
-import CreateCard from '../CreateCard/CreateCard.jsx'; 
+import CreateCard from '../CreateCard/CreateCard.jsx';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
     category: [],
-    priceRange: '',
+    search: '',
+    price: { min: 0, max: Number.MAX_VALUE },
     brand: [],
-    rating: '',
-    avgcustomerreview: '',
+    rating: 0,
   });
 
   useEffect(() => {
     fetchProducts();
   }, []);
-
-  const fetchProducts = async () => {
+  
+  const fetchProducts = async (queryParams = {}) => {
     setLoading(true);
     try {
-      const response = await getAllProducts(); 
-      
+      const response = await getAllProducts(queryParams);
+
       if (response && response.products) {
-        setProducts(response.products); 
+        setProducts(response.products);
       } else {
         console.error('No products found in response:', response);
       }
@@ -41,6 +41,7 @@ const Shop = () => {
     // You can also call the API here if filters should affect the product fetch
   };
 
+
   return (
     <div className="mt-12">
       <ShopNav />
@@ -49,7 +50,7 @@ const Shop = () => {
       <div className="flex flex-col lg:flex-row lg:space-x-4 p-4 mt-2">
         {/* Filter Sidebar */}
         <div className="lg:w-1/5 w-full mb-4 lg:mb-0">
-          <FilterSidebar filters={filters} onFilterChange={handleFilterChange} />
+          <FilterSidebar filters={filters} onFilterChange={handleFilterChange} makeNetworkCall={fetchProducts} />
         </div>
 
         {/* Product Listing Section */}
