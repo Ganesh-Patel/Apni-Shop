@@ -7,14 +7,19 @@ import {
   updateAddress,
   deleteAddress,
 } from '../../../Utils/addressApi.js'; // Import the API methods
+import { placeOrder } from '../../../Utils/ordersApi.js';
 import { valiDateCoupon } from '../../../Utils/couponsApi.js';
 import AddressModal from '../DeliveryAddress/AddressModal.jsx';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
 
 function Checkout() {
-  const { cart } = useContext(CartContext);
+  const { cart,deleteCart ,orders,setOrders} = useContext(CartContext);
+  console.log('initial cart ',cart)
+  const cartItems = cart?cart.products:[];
   const navigate = useNavigate();
-  const [totalPrice, setTotalPrice] = useState(cart?.cart?.cartTotal || 0);
+
+  const [totalPrice, setTotalPrice] = useState(cart.cartTotal);
+  const[discountedPrice,setDisCountedPrice]=useState(cart.cartTotal);
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -22,12 +27,17 @@ function Checkout() {
   const [currentAddress, setCurrentAddress] = useState(null); // To handle address update
   const [couponCode, setCouponCode] = useState('');
   const [couponValid, setCouponValid] = useState(null);
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [isPaymentDone, setIsPaymentDone] = useState(false);
   const[couponValidMessage,setCouponValidMessage]=useState('');
   const{user}=useContext(UserContext);
   
 
   useEffect(() => {
+    if(cartItems.length<1)
+    {
+      navigate('/cart');
+    }
     const fetchAddresses = async () => {
       try {
         const userId = user._id; // Replace with actual user ID
@@ -54,15 +64,17 @@ function Checkout() {
         const { discount, isPercentage, message } = response.data;
   
         // Set the success message from the backend
-        setCouponValidMessage(message || 'Coupon applied successfully!');
+        setCouponValidMessage('Coupon applied successfully!');
   
         // Apply the discount based on its type
         const newTotalPrice = isPercentage 
           ? totalPriceBeforeDiscount * (1 - discount / 100) 
           : totalPriceBeforeDiscount - discount;
+          console.log('new Total Price after Discount',newTotalPrice)
   
         // Ensure the total price doesn't go below zero
-        setTotalPrice(Math.max(newTotalPrice, 0));
+        setDisCountedPrice(Math.max(newTotalPrice, 0))
+        setIsCouponApplied(true);
       } else {
         setCouponValid(false);
         console.log(response.data);
@@ -77,16 +89,6 @@ function Checkout() {
       console.error('Error applying the coupon:', errorMessage);
     }
   };
-  
-
-  const handlePayment = () => {
-    setTimeout(() => {
-      setIsPaymentDone(true);
-      setTimeout(() => {
-        navigate('/orders');
-      }, 2000);
-    }, 1000);
-  };
 
   const handleAddressModalOpen = (address = null) => {
     setIsAddressModalOpen(true);
@@ -98,6 +100,57 @@ function Checkout() {
       setIsEditMode(false);
     }
   };
+  const handleCouponRemove = () => {
+    setCouponCode('');
+    setIsCouponApplied(false);
+    setCouponValidMessage('');
+    setDisCountedPrice(totalPrice);
+  };
+
+  const handlePayment = async () => {
+    if (!selectedAddress) {
+      alert('Please select a delivery address.');
+      return;
+    }
+  
+    try {
+      const orderId = `ORDER-${Date.now()}`;
+      const orderDetails = {
+        orderId, 
+        userId: user._id,
+        totalPrice: totalPrice, 
+        discountedPrice: discountedPrice || totalPrice, 
+        paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
+        orderDate: new Date(), // Order date and time
+        addressId: selectedAddress,
+        products: cartItems.map((item) => ({
+          productId: item.product._id,
+          productName: item.product.name,
+          quantity: item.count,
+          price: item.product.price,
+          discountedPrice: item.product.price, 
+          total: item.product.price * item.count,
+          deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
+        })),
+      };
+  
+      console.log('Order placed:', orderDetails);
+      const response=await placeOrder(orderDetails);
+      console.log(response)
+  
+      setOrders(orderDetails);
+  
+      setIsPaymentDone(true);
+      deleteCart();
+
+      setTimeout(() => {
+        navigate('/orders');
+      }, 2000);
+    } catch (error) {
+      console.error('Error placing orders:', error.message);
+    }
+  };
+  
 
   const handleAddressModalClose = () => {
     setIsAddressModalOpen(false);
@@ -129,7 +182,7 @@ function Checkout() {
 
       {/* Cart Items */}
       <div className="space-y-4">
-        {cart?.cart?.products?.map((item) => (
+        {cartItems.map((item) => (
           <div key={item._id} className="flex items-center space-x-4 border-b pb-4">
             <img src={item.product.images[0]} alt={item.product.name} className="w-24 h-24 object-cover" />
             <div className="flex-1">
@@ -179,12 +232,21 @@ function Checkout() {
             placeholder="Enter coupon code"
             className="flex-1 p-2 border rounded-md"
           />
-          <button
-            onClick={handleCouponApply}
-            className="bg-teal-500 text-white px-4 py-2 rounded-md"
-          >
-            Apply Coupon
-          </button>
+           {!isCouponApplied ? (
+            <button
+              onClick={handleCouponApply}
+              className="bg-teal-500 text-white px-4 py-2 rounded-md"
+            >
+              Apply Coupon
+            </button>
+          ) : (
+            <button
+              onClick={handleCouponRemove}
+              className="bg-red-500 text-white px-4 py-2 rounded-md"
+            >
+              Remove Coupon
+            </button>
+          )}
         </div>
         {couponValid === true && <p className="text-green-500 mt-2">{couponValidMessage}</p>}
         {couponValid === false && <p className="text-red-500 mt-2">{couponValidMessage}</p>}
@@ -192,7 +254,7 @@ function Checkout() {
 
       {/* Total Price */}
       <div className="mt-6">
-        <h2 className="text-xl font-semibold">Total Price: ₹{totalPrice.toFixed(2)}</h2>
+        <h2 className="text-xl font-semibold">Total Price: ₹{discountedPrice.toFixed(2)}</h2>
       </div>
 
       {/* Payment */}

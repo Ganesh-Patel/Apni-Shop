@@ -7,13 +7,37 @@ import style from './Cart.module.css';
 
 function Cart() {
   const navigate = useNavigate();
-  const { cart, addItemToCart, removeItemFromCart ,updateQuan,deleteCart} = useContext(CartContext);
+  const { cart, addItemToCart, removeItemFromCart ,updateQuan,deleteCart,setCart} = useContext(CartContext);
   const { isLoggedIn } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
-console.log(cart)
+
 console.log(cart?cart.products:[])
   const cartItems = cart?cart.products:[];
   console.log(cartItems)
+
+    //   // Fetch cart items on component mount
+    //   useEffect(() => {
+    //     const fetchCartItems = async () => {
+    //         setLoading(true);
+    //         try {
+    //             console.log('user status before adding to cart ', isLoggedIn)
+    //             if (isLoggedIn) {
+    //                 const data = await getCart();
+    //                 console.log('cart items ', data)
+    //                 setCart(data.cart);
+    //             } else {
+    //                 const guestCart = JSON.parse(localStorage.getItem('guestCart')) || [];
+    //                 setCart(guestCart);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching cart items:', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchCartItems();
+    // }, [cart]);
 
   useEffect(() => {
     const calculateTotalPrice = () => {
@@ -132,7 +156,7 @@ console.log(cart?cart.products:[])
               onClick={() => navigate('/checkout')}
               disabled={totalPrice === 0}
             >
-              Pay Now
+              Checkout
             </button>
           </div>
         </>

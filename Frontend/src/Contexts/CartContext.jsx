@@ -16,6 +16,7 @@ export const CartProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [cart, setCart] = useState([]);
     const { isLoggedIn } = useContext(UserContext);
+    const[orders,setOrders]=useState([]);
     const navigate = useNavigate();
 
     // Fetch cart items on component mount
@@ -47,10 +48,10 @@ export const CartProvider = ({ children }) => {
         console.log('adding item to cart fro cartContext page', product)
         try {
             if (isLoggedIn) {
-                const response = await addProductToCart(product._id, product.quantity, product.attributes);
-                console.log('response after adding to cart ', response)
-                toast(response.message);
-                setCart(response);
+                const data = await addProductToCart(product._id, product.quantity, product.attributes);
+                console.log('response after adding to cart ', data)
+                toast(data.message);
+                setCart(data.updatedCart);
 
             } else {
 
@@ -64,8 +65,8 @@ export const CartProvider = ({ children }) => {
     // Function to remove item from cart
     const removeItemFromCart = async (productId) => {
         try {
-            const updatedCart = await removeProductFromCart(productId);
-            setCart(updatedCart);
+            const data = await removeProductFromCart(productId);
+            setCart(data.updatedCart);
         } catch (error) {
             console.error('Error removing item from cart:', error);
         }
@@ -84,9 +85,8 @@ export const CartProvider = ({ children }) => {
 
     const deleteCart = async () => {
         try {
-            const updatedCart = await clearCart();
-            setCart(updatedCart);
-            return updatedCart;
+            const data = await clearCart();
+            setCart(data.updatedCart);
         } catch (error) {
             console.error('Error updating quantity:', error);
         }
@@ -101,7 +101,7 @@ export const CartProvider = ({ children }) => {
     }
 
     return (
-        <CartContext.Provider value={{ cart, addItemToCart, removeItemFromCart, updateCart, updateQuan, deleteCart }}>
+        <CartContext.Provider value={{ cart, addItemToCart, removeItemFromCart, updateCart, updateQuan, deleteCart,orders,setOrders }}>
             {children}
         </CartContext.Provider>
     );

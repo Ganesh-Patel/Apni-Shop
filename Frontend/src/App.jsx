@@ -20,7 +20,9 @@ import Cart from './Components/Pages/Cart/Cart.jsx';
 import WishList from './Components/Pages/WishList/WishList.jsx';
 import ManageCoupons from './Components/Admin/ManageCoupons/ManageCoupons.jsx';
 import CheckoutPage from './Components/Pages/CheckoutPage/CheckoutPage.jsx';
+import OrdersPage from './Components/Pages/Orders/OrdersPage.jsx';
 import ChatBots from './Chatbot/ChatBoats.jsx';
+import OrderDashboard from './Components/Admin/OrderDashboard/OrderDashboard.jsx';
 
 function App() {
   // const { isLoggedIn } = useContext(UserContext);
@@ -101,6 +103,22 @@ function App() {
             element={
               <ProtectedRoute>
                   <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                  <OrdersPage />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/adminorders"
+            element={
+              <ProtectedRoute>
+                  <OrderDashboard />
               </ProtectedRoute>
             }
           />
