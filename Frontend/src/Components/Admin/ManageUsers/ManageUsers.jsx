@@ -31,6 +31,7 @@ function ManageUsers() {
   const loadUsers = async () => {
     try {
       const response = await fetchUsers();
+      console.log(response)
       setUsers(response.data.allUsers);
       setFilteredUsers(response.data.allUsers);
     } catch (error) {

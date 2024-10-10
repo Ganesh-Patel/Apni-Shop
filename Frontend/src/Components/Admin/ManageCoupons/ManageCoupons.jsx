@@ -191,7 +191,7 @@ function ManageCoupons() {
       {/* Add Coupon Modal */}
       {
         isModalOpen && (
-          <AddCoupon isOpen={isModalOpen} onClose={closeModal} />
+          <AddCoupon isOpen={isModalOpen} onClose={closeModal}  />
         )
       }
       

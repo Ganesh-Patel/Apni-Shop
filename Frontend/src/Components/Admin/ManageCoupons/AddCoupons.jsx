@@ -52,10 +52,10 @@ function AddCoupon({ onClose, refreshCoupons }) {
     try {
       const response = await createCoupon(couponData);
       console.log(response)
-      if (response) {
+      console.log(response.data.message)
+      if (response.status=201) {
         setMessage("Coupon created successfully!");
         setSuccess(true);
-        refreshCoupons();
         setTimeout(() => {
           setLoading(false);
           onClose(); // Close modal after success

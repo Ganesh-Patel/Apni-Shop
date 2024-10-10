@@ -9,10 +9,10 @@ export const createCoupon = async (couponData) => {
       const response = await axios.post(`${BASE_URL}/create-coupon`, couponData,{
         withCredentials:true
       });
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error creating coupon:', error);
-      throw error.response ? error.response.data : new Error('Network Error');
+      return error.response ? error.response.data : new Error('Network Error');
     }
   };
   

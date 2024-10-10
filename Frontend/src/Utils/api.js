@@ -136,7 +136,7 @@ export const fetchUsers = async (searchTerm = '') => {
       }
     );
 
-    if (response.statusText === "OK") {
+    if (response) {
       return response ; // Return the data directly
     }
   } catch (err) {
