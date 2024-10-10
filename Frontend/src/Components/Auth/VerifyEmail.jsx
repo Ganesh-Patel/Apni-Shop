@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { verifyemail } from '../../Utils/api.js';
 import axios from 'axios';
 
 const VerifyEmail = () => {
@@ -23,8 +24,16 @@ const VerifyEmail = () => {
 
       try {
         // Replace with your backend verification endpoint
-        const response = await axios.get(`http://localhost:3008/api/user/verifyuser?token=${token}`);
-        setMessage('Email verified successfully! You can now log in.');
+         const response = await axios.get(`https://ecommerce-app-oqjy.onrender.com/api/user/verifyuser?token=${token}`);
+        // const response = await verifyemail(token);
+
+        if(response){
+          setMessage('Email verified successfully! You can now log in.');
+          }else{
+            setMessage('Verification failed or the token has expired or something else .');
+          }
+
+     
       } catch (error) {
         console.error('Error verifying email:', error);
         setMessage('Verification failed or the token has expired.');
