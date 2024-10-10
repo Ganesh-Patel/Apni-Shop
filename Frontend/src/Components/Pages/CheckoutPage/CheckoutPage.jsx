@@ -151,87 +151,90 @@ function Checkout() {
 //       console.error('Error placing orders:', error.message);
 //     }
 //   };
-  
 const handlePayment = async () => {
-    if (!selectedAddress) {
-      alert('Please select a delivery address.');
-      return;
-    }
-  
-    try {
-      const orderId = `ORDER-${Date.now()}`;
-      const orderDetails = {
-        orderId, 
-        userId: user._id,
-        totalPrice: totalPrice, 
-        discountedPrice: discountedPrice || totalPrice, 
-        paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
-        orderDate: new Date(),
-        addressId: selectedAddress,
-        products: cartItems.map((item) => ({
-          productId: item.product._id,
-          productName: item.product.name,
-          quantity: item.count,
-          price: item.product.price,
-          discountedPrice: item.product.price,
-          total: item.product.price * item.count,
-          deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
-        })),
-      };
-  
-      const options = {
-        key: "rzp_test_FxRK4tM1aleKRe",
-        key_secret: "pxZi3HhnspLHh5kMQbqxMamd",
-        amount: parseInt(totalPrice) * 100, // Amount in paisa
-        currency: 'INR',
-        name: 'Amazon',
-        description: 'Test Transaction',
-        image: 'https://i.pinimg.com/736x/8a/b0/12/8ab0121c7d7a90f6415b4b0edaf035d9.jpg',
-        order_id: orderId, // Pass the order ID for tracking purposes
-        handler: async function (response) {
-          console.log('Payment Response:', response);
-          
-          // Proceed with order placement
-          const responseFromServer = await placeOrder(orderDetails);
-          console.log('Server Response:', responseFromServer);
-  
-          setOrders(orderDetails); // Update the state with the new order
-          setIsPaymentDone(true); // Mark the payment as done
-          deleteCart(); // Clear the cart
-  
-          // Navigate to the orders page after a short delay
-          setTimeout(() => {
-            navigate('/orders');
-          }, 2000);
-          
-          toast('Payment Successful!');
-        },
-        prefill: {
-          name: user.name,
-          email: user.email,
-          contact: user.phone || '9999999999'
-        },
-        notes: {
-          address: 'Delivery Address'
-        },
-        theme: {
-          color: '#F7CA01'
-        }
-      };
-  
-      const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
-  
-        paymentObject.on('payment.failed', function (response) {
-        console.error('Payment Failed:', response.error);
-        alert('Payment failed. Please try again.');
-      });
-  
-    } catch (error) {
-      console.error('Error during payment or placing the order:', error.message);
-    }
-  };
-  
+  if (!selectedAddress) {
+    alert('Please select a delivery address.');
+    return;
+  }
+
+  try {
+    const orderId = `ORDER-${Date.now()}`;
+    const orderDetails = {
+      orderId,
+      userId: user._id,
+      totalPrice,
+      discountedPrice: totalPrice, // If you have a discounted price, include it
+      paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
+      orderDate: new Date(),
+      addressId: selectedAddress,
+      products: cartItems.map((item) => ({
+        productId: item.product._id,
+        productName: item.product.name,
+        quantity: item.count,
+        price: item.product.price,
+        discountedPrice: item.product.price, // Update if there's a discount
+        total: item.product.price * item.count,
+        deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
+      })),
+    };
+
+    // Set up Razorpay options
+    const options = {
+      key: "rzp_test_FxRK4tM1aleKRe",
+      key_secret: "pxZi3HhnspLHh5kMQbqxMamd",
+      amount: totalPrice * 100, // Amount in paisa (multiply by 100)
+      currency: 'INR',
+      name: 'Amazon', // Your store name
+      description: 'Test Transaction',
+      image: 'https://i.pinimg.com/736x/8a/b0/12/8ab0121c7d7a90f6415b4b0edaf035d9.jpg',
+      order_id: orderId, // Pass the order ID for tracking purposes
+      handler: async function (response) {
+        console.log('Payment Response:', response);
+
+        // Proceed with order placement
+        const responseFromServer = await placeOrder(orderDetails);
+        console.log('Server Response:', responseFromServer);
+
+        // Update the state with the new order
+        setOrders(orderDetails);
+        setIsPaymentDone(true); // Mark the payment as done
+        deleteCart(); // Clear the cart
+
+        // Navigate to the orders page after a short delay
+        setTimeout(() => {
+          navigate('/orders');
+        }, 2000);
+
+        toast('Payment Successful!');
+      },
+      prefill: {
+        name: user.name,
+        email: user.email,
+        contact: user.phone || '9999999999',
+      },
+      notes: {
+        address: 'Delivery Address',
+      },
+      theme: {
+        color: '#F7CA01',
+      },
+    };
+
+    // Create a new Razorpay instance and open the payment gateway
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+
+    // Handle payment failure
+    paymentObject.on('payment.failed', function (response) {
+      console.error('Payment Failed:', response.error);
+      alert('Payment failed. Please try again.');
+    });
+
+  } catch (error) {
+    console.error('Error during payment or placing the order:', error.message);
+    alert('An error occurred while processing your payment. Please try again.');
+  }
+};
 
   const handleAddressModalClose = () => {
     setIsAddressModalOpen(false);
