@@ -187,7 +187,7 @@ const handlePayment = async () => {
       name: 'Amazon', // Your store name
       description: 'Test Transaction',
       image: 'https://i.pinimg.com/736x/8a/b0/12/8ab0121c7d7a90f6415b4b0edaf035d9.jpg',
-      order_id: orderId, // Pass the order ID for tracking purposes
+    //   order_id: orderId, // Pass the order ID for tracking purposes
       handler: async function (response) {
         console.log('Payment Response:', response);
 
