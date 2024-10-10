@@ -1,7 +1,9 @@
 import axios from 'axios';
-// const API_URL = 'https://ecommerce-app-oqjy.onrender.com/api/';
-const API_URL = 'http://localhost:3008/api/product/';
-
+// import dotenv from 'dotenv/config';
+//  const API_URL = 'https://ecommerce-app-oqjy.onrender.com/api/';
+// const API_URL = 'http://localhost:3008/api/product/';
+// const API_URL =process.env.REACT_APP_API_URL;
+const API_URL = 'https://ecommerce-app-oqjy.onrender.com/api/product/';
 
 export const getAllProducts = async (queryParams = {}) => {
     try {

@@ -1,6 +1,10 @@
 import axios from 'axios';
+
 // const API_URL = 'https://ecommerce-app-oqjy.onrender.com/api/';
-const API_URL = 'http://localhost:3008/api/';
+//const API_URL = 'http://localhost:3008/api/';
+// const API_URL = process.env.REACT_APP_API_URL;
+ const API_URL = 'https://ecommerce-app-oqjy.onrender.com/api/';
+
 
 export const registerUser = async (user) => {
   try {
@@ -117,7 +121,6 @@ export const isUserLoggedIn= async (setIsLoggedIn,setUser) => {
     } else {
       setIsLoggedIn(false);
     }
-    
   } catch (err) {
     console.log("Error checking login status: " + err.message);
   }

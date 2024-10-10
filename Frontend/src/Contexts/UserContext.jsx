@@ -1,10 +1,12 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 import {isUserLoggedIn} from '../Utils/api.js'
+import { Navigate, useNavigate } from 'react-router-dom';
 export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); 
   const [isLoggedIn,setIsLoggedIn]=useState(false);
+  const navigate=useNavigate();
   const [loading, setLoading] = useState(true);
   
 

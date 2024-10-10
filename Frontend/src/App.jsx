@@ -25,7 +25,9 @@ import ChatBots from './Chatbot/ChatBoats.jsx';
 import OrderDashboard from './Components/Admin/OrderDashboard/OrderDashboard.jsx';
 
 function App() {
-  // const { isLoggedIn } = useContext(UserContext);
+   const { isLoggedIn } = useContext(UserContext);
+  
+
   const location = useLocation(); 
   // Pages that should NOT have the Header and Footer
   const noHeaderFooterRoutes = ['/login', '/signup', '/forgotpassword','/verifyemail','/VerifyEmail','/admin-dashboard'];

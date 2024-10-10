@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3008/api/orders';
+// const API_URL = 'http://localhost:3008/api/orders';
+// const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = 'https://ecommerce-app-oqjy.onrender.com/api/orders';
+
 
 
 const api = axios.create({

@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = "http://localhost:3008/api/coupons";  // Update with the correct base API URL if needed 
+//const BASE_URL = "http://localhost:3008/api/coupons";  // Update with the correct base API URL if needed 
+// const BASE_URL = process.env.REACT_APP_API_URL;
+const BASE_URL = 'https://ecommerce-app-oqjy.onrender.com/api/coupons';
 
 export const createCoupon = async (couponData) => {
     try {

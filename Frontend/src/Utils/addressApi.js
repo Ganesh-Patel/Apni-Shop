@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+
 // Base URL for the API
-const BASE_URL = 'http://localhost:3008/api/addresses'; 
+//const BASE_URL = 'http://localhost:3008/api/addresses'; 
+// const BASE_URL = process.env.REACT_APP_API_URL;
+const BASE_URL = 'https://ecommerce-app-oqjy.onrender.com/api/addresses';
 
 // Create a new address
 export const createAddress = async (addressData) => {
