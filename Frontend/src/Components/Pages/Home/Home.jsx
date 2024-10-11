@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CarouselHome from '../../Carousel/CarouselHome'
 import CreateCard from '../CreateCard/CreateCard';
 import { getAllProducts } from '../../../Utils/productApi.js';
 import { Puff } from 'react-loader-spinner';
+import { UserContext } from '../../../Contexts/UserContext.jsx';
 
 const images = [
   'https://images-eu.ssl-images-amazon.com/images/G/31/prime/Aug24/DEALS-REVEALED_hero_PC_pse_2_2x._CB568322891_.jpg',
@@ -16,6 +17,7 @@ function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { isLoggedIn } = useContext(UserContext);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };

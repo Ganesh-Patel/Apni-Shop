@@ -9,6 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext.jsx';
 import { toast } from 'react-toastify';
+import { Puff } from 'react-loader-spinner';
 
 export const CartContext = createContext();
 
@@ -41,7 +42,7 @@ export const CartProvider = ({ children }) => {
         };
 
         fetchCartItems();
-    }, []);
+    }, [isLoggedIn]);
 
     // Function to add item to cart
     const addItemToCart = async (product) => {
@@ -97,9 +98,14 @@ export const CartProvider = ({ children }) => {
     };
 
     if (loading) {
-        return <div>Loading Cart...</div>;
+        return (
+            <div className="flex flex-col items-center justify-center h-screen">
+                <h1 className="text-2xl mb-4">Loading...</h1>
+                <Puff width={50} height={50} color="#00BFFF" />
+            </div>
+        );
     }
-
+    
     return (
         <CartContext.Provider value={{ cart, addItemToCart, removeItemFromCart, updateCart, updateQuan, deleteCart,orders,setOrders }}>
             {children}

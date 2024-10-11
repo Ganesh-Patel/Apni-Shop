@@ -3,82 +3,82 @@ import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../../Contexts/CartContext.jsx';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
 import style from './Cart.module.css';
-
+import { getCart } from '../../../Utils/cartApi.js';
+import { Puff } from 'react-loader-spinner';
 
 function Cart() {
   const navigate = useNavigate();
-  const { cart, addItemToCart, removeItemFromCart ,updateQuan,deleteCart,setCart} = useContext(CartContext);
+  const { cart, updateQuan, removeItemFromCart, deleteCart, setCart } = useContext(CartContext);
   const { isLoggedIn } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-console.log(cart?cart.products:[])
-  const cartItems = cart?cart.products:[];
-  console.log(cartItems)
-
-    //   // Fetch cart items on component mount
-    //   useEffect(() => {
-    //     const fetchCartItems = async () => {
-    //         setLoading(true);
-    //         try {
-    //             console.log('user status before adding to cart ', isLoggedIn)
-    //             if (isLoggedIn) {
-    //                 const data = await getCart();
-    //                 console.log('cart items ', data)
-    //                 setCart(data.cart);
-    //             } else {
-    //                 const guestCart = JSON.parse(localStorage.getItem('guestCart')) || [];
-    //                 setCart(guestCart);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching cart items:', error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     fetchCartItems();
-    // }, [cart]);
-
+  const cartItems = cart?.products || [];
+  // Fetch cart items on component mount or when `isLoggedIn` changes
   useEffect(() => {
-    const calculateTotalPrice = () => {
-      const total = cartItems.reduce((sum, item) => {
-        const price = Number(item.product.price) || 0; 
-        const count = Number(item.count) || 0;
-        return sum + price * count;
-      }, 0);
-      setTotalPrice(total);
+    const fetchCartItems = async () => {
+      setLoading(true);
+      try {
+        if (isLoggedIn) {
+          const data = await getCart();
+          setCart(data.cart);
+        } else {
+          const guestCart = JSON.parse(localStorage.getItem('guestCart')) || [];
+          setCart({ products: guestCart });
+        }
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      } finally {
+        setLoading(false);
+      }
     };
-  
-    calculateTotalPrice();
+
+    fetchCartItems();
+  }, [isLoggedIn, setCart]);
+
+  // Calculate total price when cartItems change
+  useEffect(() => {
+    const total = cartItems.reduce((sum, item) => {
+      const price = item?.product?.price || 0;
+      const count = item?.count || 0;
+      return sum + price * count;
+    }, 0);
+    setTotalPrice(total);
   }, [cartItems]);
 
-  const onUpdateItemQuantity = async (productId, newQuantity,action) => {
+  const onUpdateItemQuantity = async (productId, newQuantity) => {
     try {
-      if (newQuantity > 0) {   
-        console.log('updating the product quantity')
-        const response = await updateQuan(productId, newQuantity);
-        console.log(response)
-    } else {
-      console.log('deleting the product quantity')
-      await removeItemFromCart(productId); 
-    }
+      if (newQuantity > 0) {
+        await updateQuan(productId, newQuantity);
+      } else {
+        await removeItemFromCart(productId);
+      }
     } catch (error) {
-      console.log(error)
+      console.error('Error updating item quantity:', error);
     }
   };
 
   const onDeleteItem = async (productId) => {
-    await removeItemFromCart(productId);
+    try {
+      await removeItemFromCart(productId);
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
 
-  const handleClearCart=async()=>{
-    try{
-      const response=await deleteCart();
-      console.log(response)
-    }catch(error){
-      console.log('error')
+  const handleClearCart = async () => {
+    try {
+      await deleteCart();
+      setCart({ products: [] });
+    } catch (error) {
+      console.error('Error clearing cart:', error);
     }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
+
   if (!isLoggedIn) {
     return (
       <div className={style.cartContainer}>
@@ -111,12 +111,10 @@ console.log(cart?cart.products:[])
     <div className={style.cartContainer}>
       <div className={style.cartHeader}>
         <h1 className='text-teal-500 font-extrabold text-center'>Your Cart</h1>
-        <div >
-            <button onClick={handleClearCart}   className='bg-red-400 rounded-xl py-2 px-4'>Clear Cart</button>
-        </div>
       </div>
       {cartItems.length > 0 ? (
         <>
+          <button onClick={handleClearCart} className='bg-red-400 rounded-xl py-2 px-4'>Clear Cart</button>
           <div className={style.cartItems}>
             {cartItems.map((item) => (
               <div className={style.cartItem} key={item._id}>
@@ -128,7 +126,7 @@ console.log(cart?cart.products:[])
                   <div className={style.quantityControls}>
                     <button
                       className={style.quantityButton}
-                      onClick={() => onUpdateItemQuantity(item._id, item.count - 1,"decrease")}
+                      onClick={() => onUpdateItemQuantity(item._id, item.count - 1)}
                       disabled={item.count <= 1}
                     >
                       -
@@ -136,7 +134,7 @@ console.log(cart?cart.products:[])
                     <span className={style.count}>{item.count}</span>
                     <button
                       className={style.quantityButton}
-                      onClick={() => onUpdateItemQuantity(item._id, item.count + 1,"increase")}
+                      onClick={() => onUpdateItemQuantity(item._id, item.count + 1)}
                     >
                       +
                     </button>
