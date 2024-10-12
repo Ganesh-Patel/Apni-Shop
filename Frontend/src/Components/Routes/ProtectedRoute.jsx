@@ -3,7 +3,10 @@ import { Navigate } from 'react-router-dom';
 import { UserContext } from '../../Contexts/UserContext';
 
 const ProtectedRoute = ({ children }) => {
-  const { isLoggedIn, loading } = useContext(UserContext);
+  const { isLoggedIn, loading,user } = useContext(UserContext);
+  const role=user.role;
+
+  console.log(role)
 
   if (loading) {
     return <div className="spinner">Loading...</div>;  

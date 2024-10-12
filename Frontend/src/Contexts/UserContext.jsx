@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       await isUserLoggedIn(setIsLoggedIn,setUser);
+      console.log(user);
       
       setLoading(false);
     };

@@ -16,11 +16,11 @@ function AdminDashboard() {
     return (
         <div className="flex  h-screen top-0">
             {/* Sidebar */}
-            <div className={`fixed z-10 bg-gray-800 h-full transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-64 top-0`}>
+            <div className={`fixed z-10 bg-gray-800 h-screen transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-64 top-0`}>
                 <div className="flex flex-col h-full text-white">
                     <div className="p-4 text-2xl font-bold bg-teal-900 flex justify-between items-center">
                         Admin Dashboard
-                        <button onClick={handleCloseSidebar} className="md:hidden">
+                        <button onClick={handleCloseSidebar} className="text-xl">
                             <FaTimes />
                         </button>
                     </div>
@@ -40,15 +40,7 @@ function AdminDashboard() {
             </div>
 
             {/* Main Content */}
-            <div className={`flex-1 transition-all duration-300 ml-0 ${isSidebarOpen ? 'md:ml-64' : ''}`}>
-                <div className="flex items-center justify-between p-4 bg-white shadow-md">
-                    <button
-                        className="text-gray-700 md:hidden"
-                        onClick={toggleSidebar}
-                    >
-                        {isSidebarOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
-                    </button>
-                </div>
+            <div className={`flex-1 transition-all h-screen duration-300 ml-0 ${isSidebarOpen ? 'md:ml-64' : ''}`}>
 
                 <div
                     className=" flex items-center justify-center h-full bg-cover bg-center bg-no-repeat"

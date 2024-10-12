@@ -12,7 +12,7 @@ function Navbar() {
       <Link to="/about" className="text-gray-800 hover:text-teal-500">About Us</Link>
       <Link to="/contact" className="text-gray-800 hover:text-teal-500">Contact Us</Link>
       
-      {isLoggedIn && user?.firstname === 'Ganesh' && (
+      {isLoggedIn && user?.role === 'admin' && (
         <Link to="/admin-dashboard" className="text-gray-800 hover:text-teal-500">
           Admin Dashboard
         </Link>
