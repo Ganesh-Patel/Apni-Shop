@@ -14,13 +14,13 @@ import AddressModal from '../DeliveryAddress/AddressModal.jsx';
 import { UserContext } from '../../../Contexts/UserContext.jsx';
 
 function Checkout() {
-  const { cart,deleteCart ,orders,setOrders} = useContext(CartContext);
-  console.log('initial cart ',cart)
-  const cartItems = cart?cart.products:[];
+  const { cart, deleteCart, orders, setOrders } = useContext(CartContext);
+  console.log('initial cart ', cart)
+  const cartItems = cart ? cart.products : [];
   const navigate = useNavigate();
 
   const [totalPrice, setTotalPrice] = useState(cart.cartTotal);
-  const[discountedPrice,setDisCountedPrice]=useState(cart.cartTotal);
+  const [discountedPrice, setDisCountedPrice] = useState(cart.cartTotal);
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -30,13 +30,12 @@ function Checkout() {
   const [couponValid, setCouponValid] = useState(null);
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [isPaymentDone, setIsPaymentDone] = useState(false);
-  const[couponValidMessage,setCouponValidMessage]=useState('');
-  const{user}=useContext(UserContext);
-  
+  const [couponValidMessage, setCouponValidMessage] = useState('');
+  const { user } = useContext(UserContext);
+
 
   useEffect(() => {
-    if(cartItems.length<1)
-    {
+    if (cartItems.length < 1) {
       navigate('/cart');
     }
     const fetchAddresses = async () => {
@@ -51,7 +50,7 @@ function Checkout() {
         console.error(error.message);
       }
     };
-    
+
     fetchAddresses(); // Fetch addresses on component mount
   }, []);
 
@@ -59,20 +58,20 @@ function Checkout() {
     try {
       const totalPriceBeforeDiscount = totalPrice;
       const response = await valiDateCoupon(couponCode, totalPrice);
-  
+
       if (response.status === 200) {
         setCouponValid(true);
         const { discount, isPercentage, message } = response.data;
-  
+
         // Set the success message from the backend
         setCouponValidMessage('Coupon applied successfully!');
-  
+
         // Apply the discount based on its type
-        const newTotalPrice = isPercentage 
-          ? totalPriceBeforeDiscount * (1 - discount / 100) 
+        const newTotalPrice = isPercentage
+          ? totalPriceBeforeDiscount * (1 - discount / 100)
           : totalPriceBeforeDiscount - discount;
-          console.log('new Total Price after Discount',newTotalPrice)
-  
+        console.log('new Total Price after Discount', newTotalPrice)
+
         // Ensure the total price doesn't go below zero
         setDisCountedPrice(Math.max(newTotalPrice, 0))
         setIsCouponApplied(true);
@@ -108,133 +107,131 @@ function Checkout() {
     setDisCountedPrice(totalPrice);
   };
 
-//   const handlePayment = async () => {
-//     if (!selectedAddress) {
-//       alert('Please select a delivery address.');
-//       return;
-//     }
-  
-//     try {
-//       const orderId = `ORDER-${Date.now()}`;
-//       const orderDetails = {
-//         orderId, 
-//         userId: user._id,
-//         totalPrice: totalPrice, 
-//         discountedPrice: discountedPrice || totalPrice, 
-//         paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
-//         orderDate: new Date(), // Order date and time
-//         addressId: selectedAddress,
-//         products: cartItems.map((item) => ({
-//           productId: item.product._id,
-//           productName: item.product.name,
-//           quantity: item.count,
-//           price: item.product.price,
-//           discountedPrice: item.product.price, 
-//           total: item.product.price * item.count,
-//           deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
-//         })),
-//       };
-  
-//       console.log('Order placed:', orderDetails);
-//       const response=await placeOrder(orderDetails);
-//       console.log(response)
-  
-//       setOrders(orderDetails);
-  
-//       setIsPaymentDone(true);
-//       deleteCart();
+  //   const handlePayment = async () => {
+  //     if (!selectedAddress) {
+  //       alert('Please select a delivery address.');
+  //       return;
+  //     }
 
-//       setTimeout(() => {
-//         navigate('/orders');
-//       }, 2000);
-//     } catch (error) {
-//       console.error('Error placing orders:', error.message);
-//     }
-//   };
-const handlePayment = async () => {
-  if (!selectedAddress) {
-    alert('Please select a delivery address.');
-    return;
-  }
+  //     try {
+  //       const orderId = `ORDER-${Date.now()}`;
+  //       const orderDetails = {
+  //         orderId, 
+  //         userId: user._id,
+  //         totalPrice: totalPrice, 
+  //         discountedPrice: discountedPrice || totalPrice, 
+  //         paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
+  //         orderDate: new Date(), // Order date and time
+  //         addressId: selectedAddress,
+  //         products: cartItems.map((item) => ({
+  //           productId: item.product._id,
+  //           productName: item.product.name,
+  //           quantity: item.count,
+  //           price: item.product.price,
+  //           discountedPrice: item.product.price, 
+  //           total: item.product.price * item.count,
+  //           deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
+  //         })),
+  //       };
 
-  try {
-    const orderId = `ORDER-${Date.now()}`;
-    const orderDetails = {
-      orderId,
-      userId: user._id,
-      totalPrice,
-      discountedPrice: totalPrice, // If you have a discounted price, include it
-      paymentMethod: isPaymentDone ? 'Paid Online' : 'Cash on Delivery',
-      orderDate: new Date(),
-      addressId: selectedAddress,
-      products: cartItems.map((item) => ({
-        productId: item.product._id,
-        productName: item.product.name,
-        quantity: item.count,
-        price: item.product.price,
-        discountedPrice: item.product.price, // Update if there's a discount
-        total: item.product.price * item.count,
-        deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
-      })),
-    };
+  //       console.log('Order placed:', orderDetails);
+  //       const response=await placeOrder(orderDetails);
+  //       console.log(response)
 
-    // Set up Razorpay options
-    const options = {
-      key: "rzp_test_FxRK4tM1aleKRe",
-      key_secret: "pxZi3HhnspLHh5kMQbqxMamd",
-      amount: totalPrice * 100, // Amount in paisa (multiply by 100)
-      currency: 'INR',
-      name: 'Amazon', // Your store name
-      description: 'Test Transaction',
-      image: 'https://i.pinimg.com/736x/8a/b0/12/8ab0121c7d7a90f6415b4b0edaf035d9.jpg',
-    //   order_id: orderId, // Pass the order ID for tracking purposes
-      handler: async function (response) {
-        console.log('Payment Response:', response);
+  //       setOrders(orderDetails);
 
-        // Proceed with order placement
-        const responseFromServer = await placeOrder(orderDetails);
-        console.log('Server Response:', responseFromServer);
+  //       setIsPaymentDone(true);
+  //       deleteCart();
 
-        // Update the state with the new order
-        setOrders(orderDetails);
-        setIsPaymentDone(true); // Mark the payment as done
-        deleteCart(); // Clear the cart
+  //       setTimeout(() => {
+  //         navigate('/orders');
+  //       }, 2000);
+  //     } catch (error) {
+  //       console.error('Error placing orders:', error.message);
+  //     }
+  //   };
+  const handlePayment = async (mode) => {
+    if (!selectedAddress) {
+      alert('Please select a delivery address.');
+      return;
+    }
 
-        // Navigate to the orders page after a short delay
-        setTimeout(() => {
-          navigate('/orders');
-        }, 2000);
+    try {
+      const orderId = `ORDER-${Date.now()}`;
+      const orderDetails = {
+        orderId,
+        userId: user._id,
+        totalPrice,
+        discountedPrice: totalPrice,
+        paymentMethod: mode,
+        orderDate: new Date(),
+        addressId: selectedAddress,
+        products: cartItems.map((item) => ({
+          productId: item.product._id,
+          productName: item.product.name,
+          quantity: item.count,
+          price: item.product.price,
+          discountedPrice: item.product.price, // Update if there's a discount
+          total: item.product.price * item.count,
+          deliveryDate: new Date(new Date().setDate(new Date().getDate() + Math.floor(Math.random() * 5) + 3)),
+        })),
+      };
 
-        toast('Payment Successful!');
-      },
-      prefill: {
-        name: user.name,
-        email: user.email,
-        contact: user.phone || '9999999999',
-      },
-      notes: {
-        address: 'Delivery Address',
-      },
-      theme: {
-        color: '#F7CA01',
-      },
-    };
+      // Set up Razorpay options
+      const options = {
+        key: "rzp_test_FxRK4tM1aleKRe",
+        key_secret: "pxZi3HhnspLHh5kMQbqxMamd",
+        amount: totalPrice * 100, // Amount in paisa (multiply by 100)
+        currency: 'INR',
+        name: 'Amazon', // Your store name
+        description: 'Test Transaction',
+        image: 'https://i.pinimg.com/736x/8a/b0/12/8ab0121c7d7a90f6415b4b0edaf035d9.jpg',
+        //   order_id: orderId, // Pass the order ID for tracking purposes
+        handler: async function (response) {
+          setIsPaymentDone(true);
+          orderDetails.paymentMethod = 'Paid Online'; // Set payment method explicitly here
 
-    // Create a new Razorpay instance and open the payment gateway
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+          // Proceed with order placement
+          const responseFromServer = await placeOrder(orderDetails);
+          console.log('Server Response:', responseFromServer);
 
-    // Handle payment failure
-    paymentObject.on('payment.failed', function (response) {
-      console.error('Payment Failed:', response.error);
-      alert('Payment failed. Please try again.');
-    });
+          // Update the state with the new order
+          setOrders(orderDetails);
+          deleteCart(); // Clear the cart
+          setTimeout(() => {
+            navigate('/orders');
+          }, 2000);
 
-  } catch (error) {
-    console.error('Error during payment or placing the order:', error.message);
-    alert('An error occurred while processing your payment. Please try again.');
-  }
-};
+          toast('Payment Successful!');
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+          contact: user.phone || '9999999999',
+        },
+        notes: {
+          address: 'Delivery Address',
+        },
+        theme: {
+          color: '#F7CA01',
+        },
+      };
+
+      // Create a new Razorpay instance and open the payment gateway
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+
+      // Handle payment failure
+      paymentObject.on('payment.failed', function (response) {
+        console.error('Payment Failed:', response.error);
+        alert('Payment failed. Please try again.');
+      });
+
+    } catch (error) {
+      console.error('Error during payment or placing the order:', error.message);
+      alert('An error occurred while processing your payment. Please try again.');
+    }
+  };
 
   const handleAddressModalClose = () => {
     setIsAddressModalOpen(false);
@@ -258,6 +255,24 @@ const handlePayment = async () => {
       console.error(error.message);
     }
   };
+
+  
+
+    const [paymentMethod, setPaymentMethod] = useState('');
+  
+    const handlePaymentChange = (event) => {
+      setPaymentMethod(event.target.value);
+    };
+  
+    const handleButtonClick = async() => {
+      if (paymentMethod != 'cod') {
+        console.log('Redirecting to payment...');
+        await handlePayment("PAID");
+      } else if (paymentMethod === 'cod') {
+        console.log('Placing order...');
+        await handlePayment("COD");
+      }
+    };
 
 
   return (
@@ -316,7 +331,7 @@ const handlePayment = async () => {
             placeholder="Enter coupon code"
             className="flex-1 p-2 border rounded-md"
           />
-           {!isCouponApplied ? (
+          {!isCouponApplied ? (
             <button
               onClick={handleCouponApply}
               className="bg-teal-500 text-white px-4 py-2 rounded-md"
@@ -340,15 +355,24 @@ const handlePayment = async () => {
       <div className="mt-6">
         <h2 className="text-xl font-semibold">Total Price: ₹{discountedPrice.toFixed(2)}</h2>
       </div>
+      
+      <div>
+        <label htmlFor="payment-method">Select Payment Method:</label>
+        <select id="payment-method" value={paymentMethod} onChange={handlePaymentChange}>
+          <option value="">Select...</option>
+          <option value="payment">Payment</option>
+          <option value="cod">Cash on Delivery (COD)</option>
+        </select>
+    </div>
 
       {/* Payment */}
       <div className="mt-6 flex justify-between">
         <button
-          onClick={handlePayment}
+           onClick={handleButtonClick}
           disabled={isPaymentDone}
           className="bg-teal-500 text-white px-6 py-3 rounded-md"
         >
-          Pay Now
+          {paymentMethod === 'payment' ? 'Go to Payment' : 'Place Order'}
         </button>
         <button
           onClick={() => navigate('/cart')}
@@ -366,9 +390,9 @@ const handlePayment = async () => {
       )}
 
       {/* Address Modal */}
-      <AddressModal 
-        show={isAddressModalOpen} 
-        handleClose={handleAddressModalClose} 
+      <AddressModal
+        show={isAddressModalOpen}
+        handleClose={handleAddressModalClose}
         handleSave={handleAddressSubmit}
         address={currentAddress} // Pass the current address for editing
       />

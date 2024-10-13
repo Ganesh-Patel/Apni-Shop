@@ -6,7 +6,7 @@ import SignUp from './Components/Auth/Signup.jsx';
 import Footer from './Components/Footer/Footer.jsx';
 import Header from './Components/Header/Header.jsx';
 import { UserContext } from './Components/../Contexts/UserContext';
-import ProtectedRoute from './Components/Routes/ProtectedRoute.jsx'; 
+import ProtectedRoute from './Components/Routes/ProtectedRoute.jsx';
 import ForgetPassword from './Components/Auth/ForgetPassword.jsx';
 import VerifyEmail from './Components/Auth/VerifyEmail.jsx';
 import ContatcForm from './Components/Pages/ContactPage/ContactForm.jsx';
@@ -23,21 +23,22 @@ import CheckoutPage from './Components/Pages/CheckoutPage/CheckoutPage.jsx';
 import OrdersPage from './Components/Pages/Orders/OrdersPage.jsx';
 import ChatBots from './Chatbot/ChatBoats.jsx';
 import OrderDashboard from './Components/Admin/OrderDashboard/OrderDashboard.jsx';
+import SalesDashBoard from './Components/Admin/Sales/SalesDashBoard.jsx';
 
 function App() {
-   const { isLoggedIn } = useContext(UserContext);
-  
+  const { isLoggedIn } = useContext(UserContext);
 
-  const location = useLocation(); 
+
+  const location = useLocation();
   // Pages that should NOT have the Header and Footer
-  const noHeaderFooterRoutes = ['/login', '/signup', '/forgotpassword','/verifyemail','/VerifyEmail','/admin-dashboard'];
+  const noHeaderFooterRoutes = ['/login', '/signup', '/forgotpassword', '/verifyemail', '/VerifyEmail', '/admin-dashboard'];
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Conditionally render Header and Footer if the route is not in noHeaderFooterRoutes */}
       {!noHeaderFooterRoutes.includes(location.pathname) && <Header />}
       <div className="flex-grow">
-      <ChatBots className="fixed bottom-0 right-0 z-1000"/>
+        <ChatBots className="fixed bottom-0 right-0 z-1000" />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
@@ -49,22 +50,22 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/product/:id" element={<Details />} />
-          <Route path="/cart" element={<Cart/>} />
+          <Route path="/cart" element={<Cart />} />
 
           {/* Protected Routes - only accessible if logged in */}
           <Route
             path="/admin-dashboard"
             element={
               <ProtectedRoute>
-                  <AdminDashboard />
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />
-             <Route
+          <Route
             path="/users"
             element={
               <ProtectedRoute>
-                  <ManageUsers/>
+                <ManageUsers />
               </ProtectedRoute>
             }
           />
@@ -72,19 +73,19 @@ function App() {
             path="/products"
             element={
               <ProtectedRoute>
-                  <ManageProducts/>
+                <ManageProducts />
               </ProtectedRoute>
             }
           />
-             <Route
+          <Route
             path="/coupons"
             element={
               <ProtectedRoute>
-                  <ManageCoupons/>
+                <ManageCoupons />
               </ProtectedRoute>
             }
           />
-           {/* <Route
+          {/* <Route
             path="/cart"
             element={
               <ProtectedRoute>
@@ -92,11 +93,11 @@ function App() {
               </ProtectedRoute>
             }
           /> */}
-           <Route
+          <Route
             path="/wishlist"
             element={
               <ProtectedRoute>
-                  <WishList />
+                <WishList />
               </ProtectedRoute>
             }
           />
@@ -104,27 +105,35 @@ function App() {
             path="/checkout"
             element={
               <ProtectedRoute>
-                  <CheckoutPage />
+                <CheckoutPage />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/orders"
             element={
               <ProtectedRoute>
-                  <OrdersPage />
+                <OrdersPage />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/adminorders"
             element={
               <ProtectedRoute>
-                  <OrderDashboard />
+                <OrderDashboard />
               </ProtectedRoute>
             }
           />
-    
+          <Route
+            path="/sales"
+            element={
+              <ProtectedRoute>
+                <SalesDashBoard />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
       </div>
 

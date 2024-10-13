@@ -25,6 +25,7 @@ export const placeOrder = async (orderData) => {
 export const getAllOrders = async () => {
   try {
     const response = await api.get('/get-all-orders');
+    console.log(response)
     return response.data.orders;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to retrieve orders');
